@@ -68,21 +68,31 @@ jobs:
           disable-animations: true
           script: |
             adb install apk/app-debug.apk
+            adb shell settings put system screen_off_timeout 600000
+            adb shell svc power stayon true
+            adb shell input keyevent KEYCODE_WAKEUP
+            adb shell wm dismiss-keyguard
             adb shell am start -W -n it.gianrolando.listentv/.MainActivity
-            sleep 3
+            sleep 8
             mkdir -p screenshots
             adb shell screencap -p /sdcard/listentv.png
             adb pull /sdcard/listentv.png screenshots/ListenTv-phone.png
             adb shell wm size 1600x2560
             adb shell wm density 240
+            sleep 5
+            adb shell input keyevent KEYCODE_WAKEUP
+            adb shell wm dismiss-keyguard
             adb shell am force-stop it.gianrolando.listentv
             adb shell am start -W -n it.gianrolando.listentv/.MainActivity
-            sleep 2
+            sleep 8
+            adb shell uiautomator dump /sdcard/listentv-ui.xml
+            adb pull /sdcard/listentv-ui.xml screenshots/ListenTv-tablet-ui.xml
             adb shell screencap -p /sdcard/listentv-tablet.png
             adb pull /sdcard/listentv-tablet.png screenshots/ListenTv-tablet.png
+            adb logcat -d -s AndroidRuntime > screenshots/runtime.txt
       - uses: actions/upload-artifact@v4
         with:
           name: ListenTv-ui-preview
-          path: screenshots/*.png
+          path: screenshots/*
           if-no-files-found: error
           retention-days: 30

@@ -13,13 +13,7 @@
     <string name="data_note">Audio only. Data usage depends on the TV source.</string>
     <string name="player_unavailable">Player unavailable. Close and reopen the app.</string>
     <string name="choose_channel">Choose a channel to start.</string>
-    <string name="buffering">%1$s • Buffering…</string>
-    <string name="listening">%1$s • Listening</string>
-    <string name="paused">%1$s • Paused / stopped</string>
-    <string name="your_favorites">Your favorites</string>
-    <string name="channels_status">Channels • integrations awaiting testing</string>
     <string name="wait_player">Please wait for the player to connect.</string>
-    <string name="opening">Opening %1$s…</string>
     <string name="delete_channel">Delete %1$s?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>

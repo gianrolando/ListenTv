@@ -13,13 +13,7 @@
     <string name="data_note">Solo audio. Il consumo dati dipende dalla sorgente TV.</string>
     <string name="player_unavailable">Lettore non disponibile. Chiudi e riapri l’app.</string>
     <string name="choose_channel">Scegli un canale per iniziare.</string>
-    <string name="buffering">%1$s • Caricamento…</string>
-    <string name="listening">%1$s • In ascolto</string>
-    <string name="paused">%1$s • In pausa / fermo</string>
-    <string name="your_favorites">I tuoi preferiti</string>
-    <string name="channels_status">Canali • integrazioni da collaudare</string>
     <string name="wait_player">Attendi la connessione al lettore.</string>
-    <string name="opening">Apertura di %1$s…</string>
     <string name="delete_channel">Eliminare %1$s?</string>
     <string name="delete">Elimina</string>
     <string name="cancel">Annulla</string>
@@ -56,5 +50,5 @@
     <string name="state_live">In diretta • solo audio</string>
     <string name="state_paused">Ascolto in pausa</string>
     <string name="about_audio">Informazioni sull’ascolto</string>
-    <plurals name="channel_count"><item quantity="one">%d canale</item><item quantity="other">%d canali</item></plurals>
+    <plurals name="channel_count"><item quantity="one">%d canale</item><item quantity="many">%d canali</item><item quantity="other">%d canali</item></plurals>
 </resources>
