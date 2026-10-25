@@ -17,7 +17,7 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/0.2 (Android; audio player)";
+    static final String USER_AGENT="listentv/0.2.1 (Android; audio player)";
     record Source(String url, String license, Map<String,String> licenseHeaders) { }
 
     public MediaItem resolve(Catalog.Channel channel) throws Exception {
@@ -105,12 +105,15 @@ public final class StreamResolver {
     }
     /** Bounded requests, normal TLS validation, no persisted cookies or access tokens. */
     String get(String address,Map<String,String> headers) throws Exception {
-        return request(address,headers,null);
+        return request(address,headers,null,false);
     }
     String post(String address,Map<String,String> headers,JSONObject body) throws Exception {
-        return request(address,headers,body.toString().getBytes(StandardCharsets.UTF_8));
+        return request(address,headers,body.toString().getBytes(StandardCharsets.UTF_8),false);
     }
-    private String request(String address,Map<String,String> headers,byte[] body) throws Exception {
+    String getHtmlHead(String address,Map<String,String> headers) throws Exception {
+        return request(address,headers,null,true);
+    }
+    private String request(String address,Map<String,String> headers,byte[] body,boolean headOnly) throws Exception {
         for(int redirect=0;redirect<6;redirect++) {
             requireHttps(address);
             HttpURLConnection c=(HttpURLConnection)new URL(address).openConnection();
@@ -134,13 +137,8 @@ public final class StreamResolver {
                 }
                 if(status==401 || status==403) throw new IOException("Access unavailable: authorization or geographic restriction.");
                 if(status!=200) throw new IOException("Broadcaster unavailable (HTTP "+status+").");
-                try(InputStream in=c.getInputStream(); ByteArrayOutputStream out=new ByteArrayOutputStream()) {
-                    byte[] buf=new byte[8192]; int n;
-                    while((n=in.read(buf))!=-1) {
-                        if(out.size()+n>2*1024*1024) throw new IOException("Response too large.");
-                        out.write(buf,0,n);
-                    }
-                    return out.toString(StandardCharsets.UTF_8.name());
+                try(InputStream in=c.getInputStream()) {
+                    return BoundedResponseReader.read(in,headOnly ? 128*1024 : 2*1024*1024,headOnly);
                 }
             } finally { c.disconnect(); }
         }

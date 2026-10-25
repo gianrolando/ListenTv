@@ -2,7 +2,7 @@
 
 Listen to live TV channels as audio, with background playback and Android Auto support.
 
-**Version 0.2.0 · Android prototype · GPL-3.0-or-later**
+**Version 0.2.1 · Android prototype · GPL-3.0-or-later**
 
 listentv is a native Android app that plays the audio from live television streams.
 It disables video and subtitle tracks and exposes a media catalog for Android Auto.
@@ -56,7 +56,7 @@ Data use must be measured per source. No cloud transcoding service is included.
 1. Open this repository's [Actions tab](https://github.com/gianrolando/listentv/actions).
 2. Select **Build Android APK** and open a successful run. Pushes to `main` build
    automatically; **Run workflow** also starts a manual build.
-3. Under **Artifacts**, download **listentv-0.2.0-debug** and extract it.
+3. Under **Artifacts**, download **listentv-0.2.1-debug** and extract it.
 4. Transfer `app-debug.apk` to an Android phone and allow installation from the
    app used to open the file if Android asks.
 
@@ -76,7 +76,7 @@ one using your local Gradle installation.
 ```sh
 git clone https://github.com/gianrolando/listentv.git
 cd listentv
-gradle :app:assembleDebug :app:lintDebug
+gradle :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
 ```
 
 Configure the Android SDK using `ANDROID_HOME` or a local `local.properties` file.
@@ -136,3 +136,16 @@ WorldLiveTV, Kodi, Google or the broadcasters.
 - [Track selection](https://developer.android.com/media/media3/exoplayer/track-selection)
 - [Media apps for Android Auto](https://developer.android.com/training/cars/media/auto)
 - [Car app testing](https://developer.android.com/training/cars/testing)
+
+## Mediaset troubleshooting
+
+Version 0.2.1 fixes a startup failure caused by reading the entire Mediaset
+homepage, which exceeds the API response limit. Only its HTML head is now read
+(up to 128 KiB), and the connection is closed before downloading the page body.
+Other API responses retain their 2 MiB limit. Regression tests cover large page
+bodies, split HTML head terminators and response limits.
+
+If Mediaset resolution fails, the app shows a safe stage code:
+M01 homepage metadata, M02 guest login, M03 playback authorization, M04 media
+selector, M05 stream/DRM metadata. Tokens and source URLs are not included.
+For player failures, report the displayed Media3 error code instead.

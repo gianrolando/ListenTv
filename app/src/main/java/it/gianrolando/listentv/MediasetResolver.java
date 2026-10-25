@@ -23,9 +23,18 @@ final class MediasetResolver {
 
     MediasetResolver(StreamResolver http) { this.http = http; }
 
+    static final class ResolutionException extends IOException {
+        final String stage;
+        ResolutionException(String stage, Exception cause) { super("Mediaset resolution failed at " + stage, cause); this.stage=stage; }
+    }
+    private String stage="M01";
     StreamResolver.Source resolve(String channelCode) throws Exception {
+        try { return resolveInternal(channelCode); }
+        catch(Exception error) { throw new ResolutionException(stage,error); }
+    }
+    private StreamResolver.Source resolveInternal(String channelCode) throws Exception {
         if (!channelCode.matches("[A-Z0-9]{2}")) throw new IOException("Invalid Mediaset channel code.");
-        String home = http.get(HOST, HEADERS);
+        String home = http.getHtmlHead(HOST, HEADERS);
         Matcher meta = Pattern.compile("<meta\\b[^>]*>", Pattern.CASE_INSENSITIVE).matcher(home);
         String appName = null;
         while (meta.find()) {
@@ -36,6 +45,7 @@ final class MediasetResolver {
             }
         }
         if (appName == null) throw new IOException("Mediaset application metadata changed.");
+        stage="M02";
         JSONObject login = response(http.post(API + "idm/anonymous/login/v2.0", HEADERS,
             new JSONObject().put("appName", appName).put("client_id", UUID.randomUUID().toString())));
         String token = login.getString("beToken");
@@ -44,9 +54,11 @@ final class MediasetResolver {
         Map<String,String> authorized = Map.of("Origin", HOST, "Referer", HOST + "/",
             "Accept", "application/json", "Authorization", "Bearer " + token);
         String checkUrl = Uri.parse(API + "playback/check/v2.0").buildUpon().appendQueryParameter("sid", sid).build().toString();
+        stage="M03";
         JSONObject check = response(http.post(checkUrl, authorized,
             new JSONObject().put("channelCode", channelCode).put("streamType", "LIVE")
                 .put("delivery", "Streaming").put("createDevice", "true").put("overrideAppName", appName)));
+        stage="M04";
         JSONObject selector = check.getJSONObject("mediaSelector");
         String selectorUrl = selector.getString("url");
         StreamResolver.requireHttps(selectorUrl);
@@ -59,11 +71,13 @@ final class MediasetResolver {
         while (keys.hasNext()) {
             String key = keys.next();
             if (!key.equals("url") && !key.equals("auth") && !key.equals("formats"))
-                uri.appendQueryParameter(key, selector.getString(key));
+                uri.appendQueryParameter(key, String.valueOf(selector.get(key)));
         }
         // Request the Android-compatible format; HLS can select Apple FairPlay.
         uri.appendQueryParameter("formats", "MPEG-DASH").appendQueryParameter("auth", token);
-        return parseSmil(http.get(uri.build().toString(), HEADERS), token);
+        String smil=http.get(uri.build().toString(), HEADERS);
+        stage="M05";
+        return parseSmil(smil, token);
     }
 
     private JSONObject response(String body) throws Exception {

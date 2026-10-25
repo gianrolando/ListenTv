@@ -38,3 +38,13 @@ Run interactive tests while parked or with Desktop Head Unit.
   are not implemented.
 - Compilation and Android lint are checked by the commit's GitHub Actions run.
 - Widevine license exchange and actual playback still require an Android device.
+
+## Mediaset startup fix — 0.2.1
+
+The homepage retrieved with the app user agent was approximately 6.7 MB, beyond
+the previous 2 MiB response limit. The application metadata appeared near byte
+3422 and the HTML head ended near byte 6931. The resolver now reads only the
+head (128 KiB maximum) and keeps the existing limit for complete API responses.
+Five JVM regression tests exercise the production bounded reader. The Actions
+workflow runs these tests, APK compilation and Android lint. Device playback
+and Widevine license exchange are still not validated by these checks.

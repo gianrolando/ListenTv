@@ -93,7 +93,8 @@ public final class PlaybackService extends MediaLibraryService {
                     if(ch==null) throw new IllegalArgumentException(getString(R.string.unknown_channel));
                     try { resolved.add(resolver.resolve(ch)); }
                     catch(Exception e) {
-                        preferences.edit().putString("last_error",getString(R.string.source_error,ch.name())).apply();
+                        String detail=e instanceof MediasetResolver.ResolutionException failure ? " ["+failure.stage+"]" : "";
+                        preferences.edit().putString("last_error",getString(R.string.source_error,ch.name())+detail).apply();
                         throw e;
                     }
                 }
