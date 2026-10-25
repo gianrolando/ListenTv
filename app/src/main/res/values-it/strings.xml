@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">listentv</string>
-    <string name="tagline">La televisione da ascoltare</string>
+    <string name="app_name">ListenTv</string>
+    <string name="tagline">La televisione, da ascoltare.</string>
     <string name="connecting">Connessione al lettore…</string>
     <string name="resume">Riprendi</string>
     <string name="pause">Pausa</string>
@@ -41,4 +41,20 @@
     <string name="copy_diagnostics">Copia diagnostica</string>
     <string name="diagnostics_copied">Diagnostica copiata</string>
     <string name="close">Chiudi</string>
+    <string name="more_options">Altre opzioni</string>
+    <string name="search_channels">Cerca un canale</string>
+    <string name="choose_listening">Scegli cosa ascoltare</string>
+    <string name="rai_group">Rai</string>
+    <string name="mediaset_group">Mediaset</string>
+    <string name="other_group">Altri</string>
+    <string name="no_channels">Nessun canale trovato. Prova un’altra ricerca.</string>
+    <string name="listen_to">Ascolta %1$s</string>
+    <string name="selected_channel">Selezionato • diretta</string>
+    <string name="now_listening">Adesso in ascolto</string>
+    <string name="player_idle_title">La tua TV, da ascoltare</string>
+    <string name="state_loading">Connessione alla diretta…</string>
+    <string name="state_live">In diretta • solo audio</string>
+    <string name="state_paused">Ascolto in pausa</string>
+    <string name="about_audio">Informazioni sull’ascolto</string>
+    <plurals name="channel_count"><item quantity="one">%d canale</item><item quantity="other">%d canali</item></plurals>
 </resources>

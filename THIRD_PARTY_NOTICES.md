@@ -32,3 +32,12 @@ are bundled in this source archive. See upstream distributions for notices.
 
 Television content, channel names and services belong to their respective
 owners. Source-code licensing grants no rights in television content.
+
+## Channel branding
+
+The PNG channel logos bundled in `app/src/main/res/drawable-nodpi/` are sourced
+from the broadcasters' public catalogs and official websites. Exact source URLs
+are listed in `CHANNEL_LOGOS.json`. La7 and TV2000 SVG originals were rasterized
+for Android display. Logos are broadcaster trademarks/artwork and are not
+relicensed under the source code GPL license. Their inclusion identifies the
+channels and does not imply affiliation or endorsement.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">listentv</string>
-    <string name="tagline">Television, made for listening</string>
+    <string name="app_name">ListenTv</string>
+    <string name="tagline">Turn on TV. Tune into audio.</string>
     <string name="connecting">Connecting to player…</string>
     <string name="resume">Resume</string>
     <string name="pause">Pause</string>
@@ -41,4 +41,20 @@
     <string name="copy_diagnostics">Copy diagnostics</string>
     <string name="diagnostics_copied">Diagnostics copied</string>
     <string name="close">Close</string>
+    <string name="more_options">More options</string>
+    <string name="search_channels">Search channels</string>
+    <string name="choose_listening">Find your next listen</string>
+    <string name="rai_group">Rai</string>
+    <string name="mediaset_group">Mediaset</string>
+    <string name="other_group">More</string>
+    <string name="no_channels">No channels found. Try another search.</string>
+    <string name="listen_to">Listen to %1$s</string>
+    <string name="selected_channel">Selected • live</string>
+    <string name="now_listening">Now listening</string>
+    <string name="player_idle_title">Your TV, on the go</string>
+    <string name="state_loading">Connecting to live audio…</string>
+    <string name="state_live">Live • audio only</string>
+    <string name="state_paused">Playback paused</string>
+    <string name="about_audio">About audio playback</string>
+    <plurals name="channel_count"><item quantity="one">%d channel</item><item quantity="other">%d channels</item></plurals>
 </resources>

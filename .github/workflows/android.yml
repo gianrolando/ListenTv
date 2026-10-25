@@ -26,7 +26,7 @@ jobs:
         run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: listentv-0.2.2-debug
+          name: ListenTv-0.3.0-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
@@ -42,4 +42,47 @@ jobs:
           name: listentv-lint-report
           path: app/build/reports/lint-results-debug.*
           if-no-files-found: ignore
+          retention-days: 30
+
+  ui-preview:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ListenTv-0.3.0-debug
+          path: apk
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Capture Android UI
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: |
+            adb install apk/app-debug.apk
+            adb shell am start -W -n it.gianrolando.listentv/.MainActivity
+            sleep 3
+            mkdir -p screenshots
+            adb shell screencap -p /sdcard/listentv.png
+            adb pull /sdcard/listentv.png screenshots/ListenTv-phone.png
+            adb shell wm size 1600x2560
+            adb shell wm density 240
+            adb shell am force-stop it.gianrolando.listentv
+            adb shell am start -W -n it.gianrolando.listentv/.MainActivity
+            sleep 2
+            adb shell screencap -p /sdcard/listentv-tablet.png
+            adb pull /sdcard/listentv-tablet.png screenshots/ListenTv-tablet.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ListenTv-ui-preview
+          path: screenshots/*.png
+          if-no-files-found: error
           retention-days: 30

@@ -1,8 +1,8 @@
-# listentv
+# ListenTv
 
 Listen to live TV channels as audio, with background playback and Android Auto support.
 
-**Version 0.2.2 · Android prototype · GPL-3.0-or-later**
+**Version 0.3.0 · Android prototype · GPL-3.0-or-later**
 
 listentv is a native Android app that plays the audio from live television streams.
 It disables video and subtitle tracks and exposes a media catalog for Android Auto.
@@ -56,7 +56,7 @@ Data use must be measured per source. No cloud transcoding service is included.
 1. Open this repository's [Actions tab](https://github.com/gianrolando/listentv/actions).
 2. Select **Build Android APK** and open a successful run. Pushes to `main` build
    automatically; **Run workflow** also starts a manual build.
-3. Under **Artifacts**, download **listentv-0.2.2-debug** and extract it.
+3. Under **Artifacts**, download **ListenTv-0.3.0-debug** and extract it.
 4. Transfer `app-debug.apk` to an Android phone and allow installation from the
    app used to open the file if Android asks.
 
@@ -139,7 +139,7 @@ WorldLiveTV, Kodi, Google or the broadcasters.
 
 ## Mediaset troubleshooting
 
-Version 0.2.2 fixes a startup failure caused by reading the entire Mediaset
+Version 0.3.0 fixes a startup failure caused by reading the entire Mediaset
 homepage, which exceeds the API response limit. Only its HTML head is now read
 (up to 128 KiB), and the connection is closed before downloading the page body.
 Other API responses retain their 2 MiB limit. Regression tests cover large page
@@ -170,3 +170,20 @@ also includes the latest available system crash/ANR reason. Native crash traces
 are not collected. Exception messages, stream URLs and tokens are excluded.
 Nothing is sent automatically. Device playback and the reported 20 Mediaset
 process crash still require confirmation on the affected phone.
+
+## ListenTv interface — 0.3.0
+
+The app display name is **ListenTv**. The package ID remains
+`it.gianrolando.listentv` so this is an update to the same installed app.
+A dark navy interface includes an adaptive channel grid, 24 bundled channel
+logos, search, broadcaster/favorites filters, highlighted selection and a
+persistent player panel. English and Italian follow the device language.
+
+The top-right menu contains custom sources, diagnostics and audio information.
+Custom sources use a headphones placeholder and can still be removed by a long
+press. Existing favorites are retained. Channel artwork is also included in
+media metadata for notifications and Android Auto. The stream resolvers and
+playback service behavior are preserved.
+
+Actions builds the APK and captures the native interface on an Android 15
+emulator in phone and tablet configurations; previews are separate artifacts.

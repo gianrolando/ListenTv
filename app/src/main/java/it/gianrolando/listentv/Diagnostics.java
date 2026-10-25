@@ -47,7 +47,7 @@ final class Diagnostics {
         String version="unknown";
         try { version=context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionName; }
         catch(Exception ignored) { }
-        StringBuilder report=new StringBuilder("listentv ").append(version).append("\nAndroid API ")
+        StringBuilder report=new StringBuilder("ListenTv ").append(version).append("\nAndroid API ")
             .append(Build.VERSION.SDK_INT).append(" · ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL)
             .append("\nChannel: ").append(p.getString("channel","none"))
             .append("\nLast event: ").append(p.getString("last_event","none"))

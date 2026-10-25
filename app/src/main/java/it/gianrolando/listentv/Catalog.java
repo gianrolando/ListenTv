@@ -11,9 +11,11 @@ import org.json.*;
 public final class Catalog {
     public record Channel(String id, String name, String provider, String key) {
         public MediaItem item(Context context) {
-            return new MediaItem.Builder().setMediaId(id).setMediaMetadata(
-                new MediaMetadata.Builder().setTitle(name).setArtist(context.getString(R.string.live_audio))
-                    .setIsBrowsable(false).setIsPlayable(true).build()).build();
+            MediaMetadata.Builder metadata=new MediaMetadata.Builder().setTitle(name)
+                .setArtist(context.getString(R.string.live_audio)).setIsBrowsable(false).setIsPlayable(true);
+            byte[] artwork=ChannelArtwork.data(context,id);
+            if(artwork!=null) metadata.setArtworkData(artwork,MediaMetadata.PICTURE_TYPE_FRONT_COVER);
+            return new MediaItem.Builder().setMediaId(id).setMediaMetadata(metadata.build()).build();
         }
     }
     private final SharedPreferences prefs;

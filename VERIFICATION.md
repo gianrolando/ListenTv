@@ -67,3 +67,14 @@ omission in diagnostic text. All prior bounded-read tests remain enabled.
 The new local diagnostic report is intended to distinguish a remaining source
 failure from a device player/DRM error or process crash. No native crash fix is
 claimed until the affected device can be tested.
+
+## Interface refresh — 0.3.0
+
+Bundled 24 logos from official sources. Updated the app display name to
+ListenTv, with a native dark UI, responsive grid, search/filter controls and
+persistent playback panel. Added channel artwork to media metadata.
+
+Stream-resolution code was not changed by this UI update. Existing regression
+tests, compilation and lint remain in Actions. A separate emulator job captures
+phone/tablet screenshots for visual review. Hardware audio/DRM playback and
+Android Auto remain dependent on device validation.
