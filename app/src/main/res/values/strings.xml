@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">listentv</string>
+    <string name="tagline">Television, made for listening</string>
+    <string name="connecting">Connecting to player…</string>
+    <string name="resume">Resume</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
+    <string name="all_channels">All channels</string>
+    <string name="add_source">Add an HTTPS source</string>
+    <string name="data_note">Audio only. Data usage depends on the TV source.</string>
+    <string name="player_unavailable">Player unavailable. Close and reopen the app.</string>
+    <string name="choose_channel">Choose a channel to start.</string>
+    <string name="buffering">%1$s • Buffering…</string>
+    <string name="listening">%1$s • Listening</string>
+    <string name="paused">%1$s • Paused / stopped</string>
+    <string name="your_favorites">Your favorites</string>
+    <string name="channels_status">Channels • integrations awaiting testing</string>
+    <string name="wait_player">Please wait for the player to connect.</string>
+    <string name="opening">Opening %1$s…</string>
+    <string name="delete_channel">Delete %1$s?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove_favorite">Remove %1$s from favorites</string>
+    <string name="add_favorite">Add %1$s to favorites</string>
+    <string name="empty_favorites">Star channels to find them here and in Android Auto.</string>
+    <string name="channel_name">Channel name</string>
+    <string name="url_hint">https://… (direct HLS, DASH or audio stream)</string>
+    <string name="custom_source">Custom source</string>
+    <string name="add">Add</string>
+    <string name="playback_error">Playback interrupted. Check your connection or try the channel again. (%1$s)</string>
+    <string name="live_audio">Live TV • audio only</string>
+    <string name="la7_experimental">La7 (experimental)</string>
+    <string name="invalid_url">Enter a valid HTTPS streaming URL.</string>
+    <string name="missing_name">Enter the channel name.</string>
+    <string name="unknown_channel">Unknown channel.</string>
+    <string name="source_error">Cannot open %1$s. The source may have changed, be unavailable or require authorization.</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">listentv</string>
+    <string name="tagline">La televisione da ascoltare</string>
+    <string name="connecting">Connessione al lettore…</string>
+    <string name="resume">Riprendi</string>
+    <string name="pause">Pausa</string>
+    <string name="stop">Ferma</string>
+    <string name="all">Tutti</string>
+    <string name="favorites">Preferiti</string>
+    <string name="all_channels">Tutti i canali</string>
+    <string name="add_source">Aggiungi una sorgente HTTPS</string>
+    <string name="data_note">Solo audio. Il consumo dati dipende dalla sorgente TV.</string>
+    <string name="player_unavailable">Lettore non disponibile. Chiudi e riapri l’app.</string>
+    <string name="choose_channel">Scegli un canale per iniziare.</string>
+    <string name="buffering">%1$s • Caricamento…</string>
+    <string name="listening">%1$s • In ascolto</string>
+    <string name="paused">%1$s • In pausa / fermo</string>
+    <string name="your_favorites">I tuoi preferiti</string>
+    <string name="channels_status">Canali • integrazioni da collaudare</string>
+    <string name="wait_player">Attendi la connessione al lettore.</string>
+    <string name="opening">Apertura di %1$s…</string>
+    <string name="delete_channel">Eliminare %1$s?</string>
+    <string name="delete">Elimina</string>
+    <string name="cancel">Annulla</string>
+    <string name="remove_favorite">Rimuovi %1$s dai preferiti</string>
+    <string name="add_favorite">Aggiungi %1$s ai preferiti</string>
+    <string name="empty_favorites">Aggiungi i canali con la stella: li ritroverai anche in auto.</string>
+    <string name="channel_name">Nome del canale</string>
+    <string name="url_hint">https://… (flusso diretto HLS, DASH o audio)</string>
+    <string name="custom_source">Sorgente personale</string>
+    <string name="add">Aggiungi</string>
+    <string name="playback_error">Ascolto interrotto. Verifica la connessione o riprova il canale. (%1$s)</string>
+    <string name="live_audio">Diretta TV • solo audio</string>
+    <string name="la7_experimental">La7 (sperimentale)</string>
+    <string name="invalid_url">Inserisci un URL streaming HTTPS valido.</string>
+    <string name="missing_name">Inserisci il nome del canale.</string>
+    <string name="unknown_channel">Canale sconosciuto.</string>
+    <string name="source_error">Impossibile aprire %1$s. La sorgente può essere cambiata, non disponibile o richiedere autorizzazione.</string>
+</resources>
