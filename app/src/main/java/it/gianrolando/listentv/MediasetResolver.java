@@ -63,21 +63,28 @@ final class MediasetResolver {
         String selectorUrl = selector.getString("url");
         StreamResolver.requireHttps(selectorUrl);
         // Bearer tokens must only be passed to the broadcaster's known media selector.
-        String selectorHost = Uri.parse(selectorUrl).getHost();
-        if (!("link.api.eu.theplatform.com".equals(selectorHost) || "link.theplatform.eu".equals(selectorHost)))
+        if (!MediasetPolicy.trustedSelector(selectorUrl))
             throw new IOException("Unrecognized Mediaset media selector.");
         Uri.Builder uri = Uri.parse(selectorUrl).buildUpon();
         var keys = selector.keys();
         while (keys.hasNext()) {
             String key = keys.next();
-            if (!key.equals("url") && !key.equals("auth") && !key.equals("formats"))
+            if (!key.equals("url") && !key.equals("auth") && !key.equals("formats") && !key.equals("assetTypes"))
                 uri.appendQueryParameter(key, String.valueOf(selector.get(key)));
         }
         // Request the Android-compatible format; HLS can select Apple FairPlay.
-        uri.appendQueryParameter("formats", "MPEG-DASH").appendQueryParameter("auth", token);
+        String assets=selector.getString("assetTypes");
+        // TGcom24 is unencrypted; other listed channels must select Widevine, not PlayReady.
+        if (!channelCode.equals("KF")) assets=MediasetPolicy.widevineAssets(assets);
+        uri.appendQueryParameter("assetTypes",assets).appendQueryParameter("formats", "MPEG-DASH").appendQueryParameter("auth", token);
         String smil=http.get(uri.build().toString(), HEADERS);
         stage="M05";
-        return parseSmil(smil, token);
+        StreamResolver.Source source=parseSmil(smil, token);
+        stage="M06";
+        // Resolve CDN wrappers (including 20 Mediaset) before handing the URI to Media3.
+        String finalUrl=http.resolveMediaRedirects(source.url(),HEADERS);
+        if(source.license()!=null) MediasetPolicy.requireWidevineManifest(http.get(finalUrl,HEADERS));
+        return new StreamResolver.Source(finalUrl,source.license(),source.licenseHeaders());
     }
 
     private JSONObject response(String body) throws Exception {

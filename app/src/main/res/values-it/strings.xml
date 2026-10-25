@@ -37,4 +37,8 @@
     <string name="missing_name">Inserisci il nome del canale.</string>
     <string name="unknown_channel">Canale sconosciuto.</string>
     <string name="source_error">Impossibile aprire %1$s. La sorgente può essere cambiata, non disponibile o richiedere autorizzazione.</string>
+    <string name="diagnostics">Diagnostica</string>
+    <string name="copy_diagnostics">Copia diagnostica</string>
+    <string name="diagnostics_copied">Diagnostica copiata</string>
+    <string name="close">Chiudi</string>
 </resources>

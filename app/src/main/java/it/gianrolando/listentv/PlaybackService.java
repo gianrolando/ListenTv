@@ -35,6 +35,11 @@ public final class PlaybackService extends MediaLibraryService {
                 .setConnectTimeoutMs(10000).setReadTimeoutMs(15000))).build();
         player.setAudioAttributes(new AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
             .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH).build(),true);
+        player.addListener(new Player.Listener() {
+            @Override public void onPlayerError(PlaybackException error) {
+                Diagnostics.failure(PlaybackService.this,error.getErrorCodeName(),error);
+            }
+        });
         player.setHandleAudioBecomingNoisy(true);
         player.setWakeMode(C.WAKE_MODE_NETWORK);
         player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
@@ -91,9 +96,12 @@ public final class PlaybackService extends MediaLibraryService {
                 for(MediaItem item:items) {
                     var ch=catalog.find(item.mediaId);
                     if(ch==null) throw new IllegalArgumentException(getString(R.string.unknown_channel));
+                    Diagnostics.channel(PlaybackService.this,ch.id());
                     try { resolved.add(resolver.resolve(ch)); }
                     catch(Exception e) {
-                        String detail=e instanceof MediasetResolver.ResolutionException failure ? " ["+failure.stage+"]" : "";
+                        String stage=e instanceof MediasetResolver.ResolutionException failure ? failure.stage : "RESOLVE";
+                        Diagnostics.failure(PlaybackService.this,stage,e);
+                        String detail=" ["+stage+"]";
                         preferences.edit().putString("last_error",getString(R.string.source_error,ch.name())+detail).apply();
                         throw e;
                     }

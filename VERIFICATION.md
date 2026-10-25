@@ -48,3 +48,22 @@ head (128 KiB maximum) and keeps the existing limit for complete API responses.
 Five JVM regression tests exercise the production bounded reader. The Actions
 workflow runs these tests, APK compilation and Android lint. Device playback
 and Widevine license exchange are still not validated by these checks.
+
+## Mediaset selector/DRM fixes — 0.2.2
+
+User testing of 0.2.1 found only Canale 5 and Italia 1 working and a process
+crash on 20 Mediaset. Live API inspection reproduced a matching routing split:
+12 failing channels used a selector host rejected by the app; the two working
+channels used an accepted legacy host. 20 Mediaset used a legacy selector and
+an additional CDN redirect. The source of the process crash is not established.
+
+For all 15 channels, corrected requests returned HTTP 200 manifests; 14
+protected channels advertised Widevine without PlayReady, and TGcom24 was
+unencrypted. These checks do not exercise licenses, decoding or Android Auto.
+Regression tests cover both selector generations, untrusted host rejection,
+preservation of territory/quality filters, DRM compatibility checks and token
+omission in diagnostic text. All prior bounded-read tests remain enabled.
+
+The new local diagnostic report is intended to distinguish a remaining source
+failure from a device player/DRM error or process crash. No native crash fix is
+claimed until the affected device can be tested.

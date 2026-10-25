@@ -37,4 +37,8 @@
     <string name="missing_name">Enter the channel name.</string>
     <string name="unknown_channel">Unknown channel.</string>
     <string name="source_error">Cannot open %1$s. The source may have changed, be unavailable or require authorization.</string>
+    <string name="diagnostics">Diagnostics</string>
+    <string name="copy_diagnostics">Copy diagnostics</string>
+    <string name="diagnostics_copied">Diagnostics copied</string>
+    <string name="close">Close</string>
 </resources>

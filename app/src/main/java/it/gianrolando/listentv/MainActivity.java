@@ -71,6 +71,7 @@ public final class MainActivity extends Activity {
         ScrollView scroll=new ScrollView(this); rows=new LinearLayout(this); rows.setOrientation(LinearLayout.VERTICAL); scroll.addView(rows);
         layout.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
         layout.addView(button(getString(R.string.add_source),this::addChannel));
+        layout.addView(button(getString(R.string.diagnostics),this::showDiagnostics));
         layout.addView(text(getString(R.string.data_note),12));
         setContentView(layout); renderRows();
         preferences=getSharedPreferences("catalog",MODE_PRIVATE);
@@ -100,6 +101,8 @@ public final class MainActivity extends Activity {
         if(browser==null) return;
         play.setText(browser.isPlaying()?getString(R.string.pause):getString(R.string.resume));
         if(browser.getPlayerError()!=null) return;
+        String sourceError=preferences==null ? "" : preferences.getString("last_error","");
+        if(!sourceError.isEmpty()) { status.setText(sourceError); return; }
         String name=String.valueOf(browser.getMediaMetadata().title);
         if(browser.getCurrentMediaItem()==null) status.setText(getString(R.string.choose_channel));
         else if(browser.getPlaybackState()==Player.STATE_BUFFERING) status.setText(getString(R.string.buffering,name));
@@ -130,6 +133,18 @@ public final class MainActivity extends Activity {
             row.addView(star,new LinearLayout.LayoutParams(dp(64),dp(60))); rows.addView(row);
         }
         if(count==0) rows.addView(text(getString(R.string.empty_favorites),16));
+    }
+    private void showDiagnostics() {
+        String report=Diagnostics.report(this);
+        TextView content=text(report,13); content.setTextIsSelectable(true);
+        content.setPadding(dp(20),dp(8),dp(20),dp(8));
+        ScrollView scroll=new ScrollView(this); scroll.addView(content);
+        new AlertDialog.Builder(this).setTitle(getString(R.string.diagnostics)).setView(scroll)
+            .setPositiveButton(getString(R.string.copy_diagnostics),(dialog,which)-> {
+                ClipboardManager clipboard=getSystemService(ClipboardManager.class);
+                if(clipboard!=null) clipboard.setPrimaryClip(ClipData.newPlainText("listentv diagnostics",report));
+                Toast.makeText(this,getString(R.string.diagnostics_copied),Toast.LENGTH_SHORT).show();
+            }).setNegativeButton(getString(R.string.close),null).show();
     }
     private void addChannel() {
         LinearLayout form=new LinearLayout(this); form.setOrientation(LinearLayout.VERTICAL); form.setPadding(dp(20),0,dp(20),0);

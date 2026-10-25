@@ -17,7 +17,11 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/0.2.1 (Android; audio player)";
+    static final String USER_AGENT="listentv/0.2.2 (Android; audio player)";
+    static final class HttpStatusException extends IOException {
+        final int status;
+        HttpStatusException(int status) { super("HTTP "+status); this.status=status; }
+    }
     record Source(String url, String license, Map<String,String> licenseHeaders) { }
 
     public MediaItem resolve(Catalog.Channel channel) throws Exception {
@@ -31,6 +35,7 @@ public final class StreamResolver {
         };
         requireHttps(s.url());
         MediaItem.Builder b=channel.item(context).buildUpon().setUri(s.url());
+        if(channel.provider().equals("mediaset")) b.setMimeType(androidx.media3.common.MimeTypes.APPLICATION_MPD);
         if (s.license()!=null) {
             requireHttps(s.license());
             b.setDrmConfiguration(new MediaItem.DrmConfiguration.Builder(C.WIDEVINE_UUID)
@@ -103,6 +108,25 @@ public final class StreamResolver {
         if(!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost()==null || uri.getUserInfo()!=null)
             throw new IOException("The source does not provide a valid HTTPS URL.");
     }
+    String resolveMediaRedirects(String address,Map<String,String> headers) throws Exception {
+        for(int redirect=0;redirect<6;redirect++) {
+            requireHttps(address);
+            HttpURLConnection c=(HttpURLConnection)new URL(address).openConnection();
+            c.setInstanceFollowRedirects(false); c.setConnectTimeout(10000); c.setReadTimeout(15000);
+            c.setRequestProperty("User-Agent",USER_AGENT);
+            for(var h:headers.entrySet()) c.setRequestProperty(h.getKey(),h.getValue());
+            try {
+                int code=c.getResponseCode();
+                if(code==200) return address;
+                if(code==301 || code==302 || code==303 || code==307 || code==308) {
+                    String next=c.getHeaderField("Location");
+                    if(next==null) throw new IOException("Invalid media redirect.");
+                    address=new URI(address).resolve(next).toString();
+                } else throw new HttpStatusException(code);
+            } finally { c.disconnect(); }
+        }
+        throw new IOException("Too many media redirects.");
+    }
     /** Bounded requests, normal TLS validation, no persisted cookies or access tokens. */
     String get(String address,Map<String,String> headers) throws Exception {
         return request(address,headers,null,false);
@@ -135,8 +159,8 @@ public final class StreamResolver {
                     if(next==null) throw new IOException("Invalid redirect.");
                     address=new URI(address).resolve(next).toString(); continue;
                 }
-                if(status==401 || status==403) throw new IOException("Access unavailable: authorization or geographic restriction.");
-                if(status!=200) throw new IOException("Broadcaster unavailable (HTTP "+status+").");
+                if(status==401 || status==403) throw new HttpStatusException(status);
+                if(status!=200) throw new HttpStatusException(status);
                 try(InputStream in=c.getInputStream()) {
                     return BoundedResponseReader.read(in,headOnly ? 128*1024 : 2*1024*1024,headOnly);
                 }
