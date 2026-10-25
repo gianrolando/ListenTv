@@ -17,11 +17,12 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/0.1 (Android; audio player)";
-    private record Source(String url, String license, Map<String,String> licenseHeaders) { }
+    static final String USER_AGENT="listentv/0.2 (Android; audio player)";
+    record Source(String url, String license, Map<String,String> licenseHeaders) { }
 
     public MediaItem resolve(Catalog.Channel channel) throws Exception {
         Source s=switch(channel.provider()) {
+            case "mediaset" -> new MediasetResolver(this).resolve(channel.key());
             case "rai" -> rai(channel.key());
             case "sky" -> plain(json("https://video.sky.it/api/v1/getLivestream?id="+channel.key()+"&isMobile=false").getString("streaming_url"));
             case "tv2000" -> tv2000(channel.key());
@@ -103,7 +104,13 @@ public final class StreamResolver {
             throw new IOException("The source does not provide a valid HTTPS URL.");
     }
     /** Bounded requests, normal TLS validation, no persisted cookies or access tokens. */
-    private String get(String address,Map<String,String> headers) throws Exception {
+    String get(String address,Map<String,String> headers) throws Exception {
+        return request(address,headers,null);
+    }
+    String post(String address,Map<String,String> headers,JSONObject body) throws Exception {
+        return request(address,headers,body.toString().getBytes(StandardCharsets.UTF_8));
+    }
+    private String request(String address,Map<String,String> headers,byte[] body) throws Exception {
         for(int redirect=0;redirect<6;redirect++) {
             requireHttps(address);
             HttpURLConnection c=(HttpURLConnection)new URL(address).openConnection();
@@ -112,8 +119,15 @@ public final class StreamResolver {
             c.setRequestProperty("User-Agent",USER_AGENT);
             for(var h:headers.entrySet()) c.setRequestProperty(h.getKey(),h.getValue());
             try {
+                if(body!=null) {
+                    c.setRequestMethod("POST"); c.setDoOutput(true);
+                    c.setRequestProperty("Content-Type","application/json; charset=UTF-8");
+                    c.setFixedLengthStreamingMode(body.length);
+                    try(OutputStream out=c.getOutputStream()) { out.write(body); }
+                }
                 int status=c.getResponseCode();
                 if(status>=300 && status<400) {
+                    if(body!=null) throw new IOException("Unexpected redirect from authorization service.");
                     String next=c.getHeaderField("Location");
                     if(next==null) throw new IOException("Invalid redirect.");
                     address=new URI(address).resolve(next).toString(); continue;

@@ -26,3 +26,15 @@ callback signatures. Those checks are inherited provenance, not new playback tes
 - Measure bandwidth for separate audio renditions and multiplexed streams.
 
 Run interactive tests while parked or with Desktop Head Unit.
+
+## Mediaset integration — 0.2.0
+
+- Added 15 free-to-air Mediaset channel entries with stable catalog IDs.
+- Checked the official station catalog and anonymous login response.
+- Checked playback authorization, SMIL resolution and manifest HTTP availability
+  for each listed Mediaset channel. This does not test decrypted audio playback.
+- Selected DASH rather than FairPlay HLS and configured standard Widevine licensing.
+- Account-only streams, subscription content and geographic restriction bypass
+  are not implemented.
+- Compilation and Android lint are checked by the commit's GitHub Actions run.
+- Widevine license exchange and actual playback still require an Android device.

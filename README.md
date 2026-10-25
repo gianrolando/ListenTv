@@ -2,7 +2,7 @@
 
 Listen to live TV channels as audio, with background playback and Android Auto support.
 
-**Version 0.1.0 · Android prototype · GPL-3.0-or-later**
+**Version 0.2.0 · Android prototype · GPL-3.0-or-later**
 
 listentv is a native Android app that plays the audio from live television streams.
 It disables video and subtitle tracks and exposes a media catalog for Android Auto.
@@ -28,10 +28,16 @@ The interface follows the device language: English by default, Italian on Italia
 | Channels | Implemented source procedure | Playback validation |
 | --- | --- | --- |
 | Rai 1, Rai 2, Rai 3, Rai News 24 | RaiPlay catalog and relinker; Widevine configuration when supplied | Pending |
+| Rete 4, Canale 5, Italia 1, TGcom24, 20 Mediaset, Iris, La5, Mediaset Extra, Focus, Top Crime, Italia 2, Cine34, 27 Twentyseven, Boing, Cartoonito | Mediaset guest authorization, playback check, DASH selection and Widevine license configuration | API resolution checked; device playback pending |
 | Sky TG24, Cielo, TV8 | Sky live API | Pending |
 | TV2000 | Meride/Play2000 XML configuration | Pending |
 | La7 | Live page, preauthorization and Widevine license configuration | Experimental; pending |
 | Custom sources | Direct HTTPS URLs supported by Media3 | Depends on source |
+
+Mediaset uses a fresh anonymous guest session for each playback request. No account
+credentials are requested and tokens are not saved. Its standard playback check
+controls access; protected streams use the license service with Android Widevine.
+Account-only or subscription content is not included.
 
 Provider procedures are adapted from WorldLiveTV; Kodi is not required.
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution.
@@ -50,7 +56,7 @@ Data use must be measured per source. No cloud transcoding service is included.
 1. Open this repository's [Actions tab](https://github.com/gianrolando/listentv/actions).
 2. Select **Build Android APK** and open a successful run. Pushes to `main` build
    automatically; **Run workflow** also starts a manual build.
-3. Under **Artifacts**, download **listentv-0.1.0-debug** and extract it.
+3. Under **Artifacts**, download **listentv-0.2.0-debug** and extract it.
 4. Transfer `app-debug.apk` to an Android phone and allow installation from the
    app used to open the file if Android asks.
 
@@ -101,7 +107,7 @@ and compliance with Google's current car app review requirements.
 
 ## Known limitations and validation
 
-No EPG, voice search, M3U import, recording, Mediaset login, traffic meter or
+No EPG, voice search, M3U import, recording, Mediaset account login, traffic meter or
 custom long-outage reconnection logic is implemented. Normal player retries
 are provided by ExoPlayer. Low-level provider diagnostics are in English.
 
