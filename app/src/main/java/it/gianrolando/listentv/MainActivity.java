@@ -12,6 +12,7 @@ import androidx.media3.session.MediaController;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.*;
 
+@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
 public final class MainActivity extends Activity {
     private Catalog catalog;
     private MediaBrowser browser;
