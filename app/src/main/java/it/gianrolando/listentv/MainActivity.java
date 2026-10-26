@@ -136,7 +136,7 @@ public final class MainActivity extends Activity {
     }
     private void renderFilters() {
         chips.removeAllViews();
-        String[] ids={"all","favorites","rai","mediaset","other"};int[] titles={R.string.all,R.string.favorites,R.string.rai_group,R.string.mediaset_group,R.string.other_group};
+        String[] ids={"all","favorites","rai","mediaset","discovery","other"};int[] titles={R.string.all,R.string.favorites,R.string.rai_group,R.string.mediaset_group,R.string.discovery_group,R.string.other_group};
         for(int i=0;i<ids.length;i++) {
             String id=ids[i];boolean active=filter.equals(id);TextView chip=label(getString(titles[i]),13,active?BG:MUTED,true);
             chip.setGravity(Gravity.CENTER);chip.setPadding(dp(17),0,dp(17),0);touch(chip,active?MINT:SURFACE,22);
@@ -146,14 +146,14 @@ public final class MainActivity extends Activity {
         }
     }
     private String provider(Catalog.Channel channel) {
-        return switch(channel.provider()) { case "rai" -> "Rai";case "mediaset" -> "Mediaset";case "sky" -> "Sky";case "la7" -> "La7";case "tv2000" -> "TV2000";default -> getString(R.string.custom_source); };
+        return switch(channel.provider()) { case "rai" -> "Rai";case "mediaset" -> "Mediaset";case "discovery" -> "Discovery";case "sky" -> "Sky";case "la7" -> "La7";case "tv2000" -> "TV2000";default -> getString(R.string.custom_source); };
     }
     private void renderChannels() {
         if(rows==null) return;
         rows.removeAllViews();cards.clear();cardSubtitles.clear();
         String term=query.trim().toLowerCase(Locale.ROOT);List<Catalog.Channel> visible=new ArrayList<>();
         for(Catalog.Channel channel:catalog.all()) {
-            boolean match=switch(filter) {case "favorites" -> catalog.favorite(channel.id());case "rai","mediaset" -> channel.provider().equals(filter);case "other" -> !Set.of("rai","mediaset").contains(channel.provider());default -> true;};
+            boolean match=switch(filter) {case "favorites" -> catalog.favorite(channel.id());case "rai","mediaset","discovery" -> channel.provider().equals(filter);case "other" -> !Set.of("rai","mediaset","discovery").contains(channel.provider());default -> true;};
             if(match && (term.isEmpty() || (channel.name()+" "+provider(channel)).toLowerCase(Locale.ROOT).contains(term))) visible.add(channel);
         }
         resultCount.setText(getResources().getQuantityString(R.plurals.channel_count,visible.size(),visible.size()));
@@ -248,7 +248,7 @@ public final class MainActivity extends Activity {
     @Override protected void onDestroy() {if(preferences!=null)preferences.unregisterOnSharedPreferenceChangeListener(errorListener);super.onDestroy();}
     @Override protected void onSaveInstanceState(Bundle out) {out.putString("filter",filter);out.putString("query",query);out.putString("selected",selectedId);super.onSaveInstanceState(out);}
     private void showAbout() {
-        String version="1.0.0";
+        String version="1.1.0";
         try { version=getPackageManager().getPackageInfo(getPackageName(),0).versionName; } catch(Exception ignored) { }
         TextView content=label(getString(R.string.about_body),15,INK,false);
         content.setLineSpacing(dp(5),1f);content.setPadding(dp(24),dp(12),dp(24),dp(16));content.setTextIsSelectable(true);

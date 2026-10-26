@@ -106,3 +106,15 @@ Repository visibility remains private; no public publication is authorized.
 - Signed APK SHA-256: `49bc47997bf9638c54fcdf3dce75aee3b9e0df00f64536dcc4a7301f5d58234f`.
 - Offline license/credits assets verified in the signed APK.
 - The later signing-script/documentation commit does not change the compiled app source.
+
+## Expanded catalog — 1.1.0 (2026-10-26)
+
+- Compared WorldLiveTV 1.2.14 discovery.py with its 2026-04-19 hotfix.
+- Queried current RaiPlay live catalog: 15 entries, including Italiana and Rai 4K.
+- All 15 Rai relinkers and manifests returned HTTP 200.
+- Anonymous Discovery authorization and HLS manifests returned HTTP 200 for NOVE, Real Time, DMAX, Giallo, Food Network, HGTV, Discovery, Discovery Turbo and Warner TV.
+- K2 and Frisbee guest authorization returned HTTP 200, but the supplied HLS and DASH manifests returned HTTP 504. This upstream limitation is documented rather than described as working playback.
+- No live guest tokens or signed stream URLs are stored in the repository.
+- Added regression coverage for Discovery authorization endpoint trust and unrecognized channel keys. Existing MediaSet/reader/crash-text tests remain unchanged.
+- Runtime audio/DRM and Android Auto playback on physical hardware remain device checks; successful HTTP manifests alone do not validate them.
+- The 1.0.0 private signing key is reused for the 1.1.0 APK.

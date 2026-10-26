@@ -17,16 +17,19 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/0.2.2 (Android; audio player)";
+    static final String USER_AGENT="listentv/1.1.0 (Android; audio player)";
     static final class HttpStatusException extends IOException {
         final int status;
         HttpStatusException(int status) { super("HTTP "+status); this.status=status; }
     }
-    record Source(String url, String license, Map<String,String> licenseHeaders) { }
+    record Source(String url, String license, Map<String,String> licenseHeaders,String mimeType) {
+        Source(String url,String license,Map<String,String> licenseHeaders) { this(url,license,licenseHeaders,null); }
+    }
 
     public MediaItem resolve(Catalog.Channel channel) throws Exception {
         Source s=switch(channel.provider()) {
             case "mediaset" -> new MediasetResolver(this).resolve(channel.key());
+            case "discovery" -> new DiscoveryResolver(this).resolve(channel.key());
             case "rai" -> rai(channel.key());
             case "sky" -> plain(json("https://video.sky.it/api/v1/getLivestream?id="+channel.key()+"&isMobile=false").getString("streaming_url"));
             case "tv2000" -> tv2000(channel.key());
@@ -35,6 +38,7 @@ public final class StreamResolver {
         };
         requireHttps(s.url());
         MediaItem.Builder b=channel.item(context).buildUpon().setUri(s.url());
+        if(s.mimeType()!=null) b.setMimeType(s.mimeType());
         if(channel.provider().equals("mediaset")) b.setMimeType(androidx.media3.common.MimeTypes.APPLICATION_MPD);
         if (s.license()!=null) {
             requireHttps(s.license());

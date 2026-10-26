@@ -54,3 +54,20 @@ with an appropriate background and lossless PNG encoding.
 Copyright for original ListenTv code: © 2026 Gianrolando Scaringi.
 Adapted WorldLiveTV code retains WLTV Group attribution and GPL-3.0-or-later.
 Channel artwork is not relicensed under the GPL source-code license.
+
+## Rai and Discovery catalog update — 1.1.0
+
+`DiscoveryResolver.java` adapts `broadcaster/discovery.py` from WorldLiveTV
+1.2.14 and its hotfix dated 2026-04-19, by WLTV Group, GPL-3.0-or-later.
+Changes include Java/Media3 integration, validated authorization endpoints,
+HTTPS-only requests, ephemeral guest tokens, HLS fallback and explicit MIME
+types. No account login or subscription bypass is implemented.
+
+Rai channel names and stream relinkers are taken from the official current
+RaiPlay live catalog. Color Rai SVG marks and K2/Frisbee marks are sourced
+from Wikimedia Commons (RAI and WBD remain the respective trademark owners);
+Italiana uses its official RaiPlay mark. Discovery marks are retrieved from
+the broadcaster's Aurora site configurations through its official image
+service. SVGs are rasterized and transparent padding is trimmed, preserving
+colors and proportions. Exact original/image-service URLs are recorded in
+CHANNEL_LOGOS.json. No logo is relicensed under the source-code GPL.

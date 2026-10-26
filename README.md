@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.0.0 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.1.0 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -11,8 +11,8 @@ Copyright © 2026 Gianrolando Scaringi.
 - Audio-only Media3 playback, including screen-off listening and media controls.
 - Native dark interface, channel logos, search and broadcaster/favorites filters.
 - Android Auto media catalog with persistent favorites and 512-pixel artwork.
-- Rai 1, Rai 2, Rai 3, Rai News 24, 15 free-to-air Mediaset channels, Sky TG24,
-  Cielo, TV8, La7 and TV2000 integrations.
+- All 15 channels in RaiPlay's current live catalog, 15 free-to-air Mediaset
+  channels, 11 Warner Bros. Discovery channels, Sky TG24, Cielo, TV8, La7 and TV2000.
 - Custom direct HTTPS HLS, DASH and audio sources.
 - English and Italian interface, selected from the device language.
 - In-app copyright, GPL license text and third-party credits, available offline.
@@ -22,9 +22,32 @@ MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
 All channel logos are bundled, so displaying them does not require a network
 request. Logos and television content belong to their respective owners.
 
+## Expanded channel catalog — 1.1.0
+
+Rai: Rai 1, Rai 2, Rai 3, Rai News 24, Rai Sport, Rai Radio 2 visual radio,
+Rai 4K, Rai 4, Rai 5, Rai Movie, Rai Premium, Rai Storia, Italiana, Rai Yoyo and
+Rai Gulp. Names follow the current official live catalog (including Italiana).
+Rai marks use color vector originals rasterized at high resolution; the new
+Italiana mark uses the official RaiPlay asset and its channel background color.
+
+Discovery: NOVE, Real Time, DMAX, Giallo, Food Network, HGTV, Discovery,
+Discovery Turbo, Warner TV, K2 and Frisbee. Discovery guest playback is adapted
+from WorldLiveTV 1.2.14 and its April 2026 hotfix. Current Aurora configurations
+supply channel IDs and endpoints; HLS-only sources are supported. No paid
+channels, account credentials or subscription bypass is included.
+
+At verification on 2026-10-26 all 15 Rai manifests and 9 Discovery manifests
+responded successfully. K2 and Frisbee authorized successfully but their CDN
+returned HTTP 504 for both HLS and DASH; they remain in the catalog for retry
+when the broadcaster restores service. This is not a decrypted hardware audio
+or Android Auto playback test.
+
+Updates from stable 1.0.0 retain favorites and custom sources because the same
+private release signing key is used.
+
 ## Install the stable app
 
-Install the signed `ListenTv-1.0.0.apk` from the private release package supplied
+Install the signed `ListenTv-1.1.0.apk` from the private release package supplied
 by the project owner. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 

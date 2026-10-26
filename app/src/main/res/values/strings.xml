@@ -54,4 +54,5 @@
     <string name="third_party_notices">Credits</string>
     <string name="legal_unavailable">License information is unavailable.</string>
     <string name="about_body">© 2026 Gianrolando Scaringi.\n\nListenTv lets you listen to live television as audio, in the background and with Android Auto.\n\nFree software under the GNU General Public License, version 3 or any later version (GPL-3.0-or-later). You may use, study, modify and redistribute the source code under that license. Supplied without warranty.\n\nSome stream resolvers are adapted from WorldLiveTV by WLTV Group. AndroidX Media3 and other components retain their respective licenses.\n\nChannel logos, names and programs belong to their respective owners. ListenTv is an independent project, with no broadcaster affiliation.</string>
+    <string name="discovery_group">Discovery</string>
 </resources>
