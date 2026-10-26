@@ -93,3 +93,16 @@ phone/tablet screenshots from a separate UI test build. The unsigned release
 is signed locally using a dedicated private PKCS12 key kept outside GitHub.
 The final APK must pass apksigner verification after signing.
 Repository visibility remains private; no public publication is authorized.
+
+### Recorded release checks — 2026-10-26
+
+- Source build commit: `e6a07e4e26beb4f369dd95e1438f160a951f64bd`.
+- Private Actions run: https://github.com/gianrolando/ListenTv/actions/runs/40352952651.
+- Release unit tests, release/debug compilation and release lint passed.
+- Lint reported 0 errors and 9 warnings (dependency/SDK updates, crash-log persistence and media-service/backup declarations).
+- APK identity: `it.gianrolando.listentv`, version 1.0.0 (6), minimum Android API 23; debugging disabled.
+- Dedicated RSA-3072 release signature verified successfully with APK signature schemes v1, v2 and v3.
+- Signing certificate SHA-256: `8f473cc34b872ae99d4e630ded22ec544a0c6440981c8774318908e8ab887795`.
+- Signed APK SHA-256: `49bc47997bf9638c54fcdf3dce75aee3b9e0df00f64536dcc4a7301f5d58234f`.
+- Offline license/credits assets verified in the signed APK.
+- The later signing-script/documentation commit does not change the compiled app source.
