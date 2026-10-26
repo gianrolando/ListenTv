@@ -145,3 +145,14 @@ Repository visibility remains private; no public publication is authorized.
   source URLs, and rejection of insecure/credential-bearing sources.
 - Uses the same stable release signing key; Android Auto hardware playback
   and Widevine license/decode remain physical-device checks.
+
+### Recorded 1.2.0 release artifact
+
+- Application source commit: `00fe38036233b588d4b3a8fef440c44731db1c9f`.
+- Private Actions run: https://github.com/gianrolando/ListenTv/actions/runs/40387678722.
+- Release unit tests, release/debug compilation and release lint passed.
+- Signed APK version 1.2.0 (8), debugging disabled; APK SHA-256: `4ed796f3e5ea7a9ee32671a15c80cb6ba29a939180ac1cca11d0f016c9e4a003`.
+- Signature schemes v1/v2/v3 verified; certificate is unchanged from stable 1.0.0 and 1.1.0 (`8f473cc34b872ae99d4e630ded22ec544a0c6440981c8774318908e8ab887795`).
+- Offline GPL and component notices verified in the signed APK.
+- A later documentation-only commit does not change compiled application source.
+- Phone/tablet emulator preview passed; reviewed a 48-channel catalog with Rai Radio 2 removed and no Java fatal exception in the captured runtime log.
