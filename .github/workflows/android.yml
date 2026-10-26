@@ -104,9 +104,11 @@ jobs:
             adb pull /sdcard/listentv-ui.xml screenshots/ListenTv-tablet-ui.xml
             adb shell screencap -p /sdcard/listentv-tablet.png
             adb pull /sdcard/listentv-tablet.png screenshots/ListenTv-tablet.png
-            python3 -c 'import xml.etree.ElementTree as E; labels=[n.get("text", "") for n in E.parse("screenshots/ListenTv-tablet-ui.xml").iter("node")]; programmes=[s for s in labels if s.startswith("Now ·")]; assert "48 channels" in labels; assert programmes, "No live guide titles in emulator"; print("GUIDE_UI_OK", programmes[:4])'
+            adb logcat -d -s ListenTvGuide AndroidRuntime
+            python3 -c 'import xml.etree.ElementTree as E; labels=[n.get("text", "") for n in E.parse("screenshots/ListenTv-tablet-ui.xml").iter("node")]; programmes=[s for s in labels if s.startswith("Now ·")]; print("GUIDE_UI_LABELS", labels[:90]); assert "48 channels" in labels; assert programmes, "No live guide titles in emulator"; print("GUIDE_UI_OK", programmes[:4])'
             adb logcat -d -s AndroidRuntime > screenshots/runtime.txt
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: ListenTv-ui-preview
           path: screenshots/*

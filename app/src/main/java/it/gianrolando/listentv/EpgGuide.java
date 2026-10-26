@@ -62,11 +62,11 @@ final class EpgGuide {
                 byte[] compressed=download();
                 try(InputStream in=new XZInputStream(new ByteArrayInputStream(compressed),32768)) {programmes.addAll(EpgXmlTv.read(in,known,now));}
                 downloaded=!programmes.isEmpty();if(downloaded)publish(programmes);
-            } catch(Exception unavailable) {for(var list:schedules.values())programmes.addAll(list);}
+            } catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Guide feed unavailable",unavailable);for(var list:schedules.values())programmes.addAll(list);}
             // Use official schedules where XMLTV has an obsolete name or placeholder.
             for(var fallback:Map.of("italiana","italiana","rai4k","rai-4k").entrySet()) {
                 List<EpgProgramme> extra;
-                try {extra=raiSchedule(fallback.getKey(),fallback.getValue(),now);}catch(Exception unavailable) {extra=schedules.getOrDefault(fallback.getKey(),List.of());}
+                try {extra=raiSchedule(fallback.getKey(),fallback.getValue(),now);}catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Rai schedule unavailable: "+fallback.getKey(),unavailable);extra=schedules.getOrDefault(fallback.getKey(),List.of());}
                 if(!extra.isEmpty()){programmes.removeIf(p->p.channel().equals(fallback.getKey()));programmes.addAll(extra);}
             }
             if(!programmes.isEmpty()) {
@@ -97,7 +97,7 @@ final class EpgGuide {
                         next=new URI("https",next.getAuthority(),next.getPath(),next.getQuery(),next.getFragment());
                     address=next.toString();continue;
                 }
-                if(status!=200)throw new IOException("Guide service unavailable.");
+                if(status!=200)throw new IOException("Guide service HTTP "+status);
                 try(InputStream in=new EpgXmlTv.LimitedInput(connection.getInputStream(),4*1024*1024);ByteArrayOutputStream bytes=new ByteArrayOutputStream()) {
                     byte[] buffer=new byte[16384];for(int n;(n=in.read(buffer))!=-1;)bytes.write(buffer,0,n);return bytes.toByteArray();
                 }
