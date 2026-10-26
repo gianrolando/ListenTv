@@ -118,3 +118,15 @@ Repository visibility remains private; no public publication is authorized.
 - Added regression coverage for Discovery authorization endpoint trust and unrecognized channel keys. Existing MediaSet/reader/crash-text tests remain unchanged.
 - Runtime audio/DRM and Android Auto playback on physical hardware remain device checks; successful HTTP manifests alone do not validate them.
 - The 1.0.0 private signing key is reused for the 1.1.0 APK.
+
+### Recorded 1.1.0 release artifact
+
+- Application source commit: `275a3242a055336601dcc2e2a132b6a4e78201b4`.
+- Private Actions run: https://github.com/gianrolando/ListenTv/actions/runs/40378692540.
+- Release unit tests, release/debug compilation and release lint passed.
+- APK: ListenTv-1.1.0.apk, application ID `it.gianrolando.listentv`, version code 7, debugging disabled.
+- APK SHA-256: `5293c2b59e13173632719898d3ac61cb40b06294fb66bbcf60367e0ff5c30dc2`.
+- APK signature schemes v1, v2 and v3 verified. Certificate SHA-256 is unchanged from 1.0.0: `8f473cc34b872ae99d4e630ded22ec544a0c6440981c8774318908e8ab887795`.
+- Offline GPL and component-credit assets verified in the final signed APK.
+- A later verification-only commit does not change the compiled application source.
+- Phone and tablet emulator capture job passed; reviewed color Rai logos, catalog count (46), and Discovery filter. Runtime capture contains no Java fatal exception.
