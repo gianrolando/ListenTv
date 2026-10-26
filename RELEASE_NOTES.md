@@ -1,15 +1,15 @@
-# ListenTv 1.1.0 — expanded live catalog
+# ListenTv 1.2.0 — catalog corrections
 
-- Expand Rai from 4 to all 15 channels in the current RaiPlay live catalog.
-- Use high-resolution color Rai logos, including thematic channels.
-- Add 11 Warner Bros. Discovery entries and a Discovery filter.
-- Adapt WorldLiveTV's current anonymous Aurora playback procedure, including HLS-only sources and updated Discovery/Turbo channel names.
-- Keep stable catalog IDs, favorites, custom sources, background audio and Android Auto integration.
-- Sign with the same private release key as 1.0.0 so this installs as an update.
+- Remove Rai Radio 2, keeping television channels in the catalog.
+- Show TV8 in the Discovery filter, retaining the working Sky playback source.
+- Add La7 Cinema, San Marino RTV and San Marino RTV Sport under More/Altri.
+- Add the new channel logos and resolve RTV signed live URLs dynamically.
+- 48 television entries in total; existing favorites and custom sources remain.
+- Use the same permanent release key as stable 1.0.0 and 1.1.0.
 
-All 15 Rai manifests and 9 Discovery manifests returned HTTP 200 during checks.
-K2 and Frisbee authorization succeeds, but their CDN currently returns HTTP 504
-for both formats; they are included with source availability dependent on the
-broadcaster. Paid Discovery services are not included.
+HTTP checks validated La7 Cinema's authorization and DASH manifest and both
+San Marino HLS master/media playlists. These checks do not validate hardware
+DRM decoding or physical Android Auto playback. The previously documented
+upstream K2/Frisbee availability limitation remains.
 
-The repository remains private; no public release is part of this delivery.
+The GitHub repository remains private. No public publication is included.

@@ -24,7 +24,6 @@
   "tv2000": "https://www.tv2000.it/wp-content/themes/tv2000/assets/images/logo.svg",
   "cielo": "https://static.sky.it/editorialimages/9e3c789324e782979e8f1ba6a0f5da53f40e3ad8/cielo/assets/it-configurations/cieloDark.png",
   "raisport": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Rai_Sport_-_Logo_2022.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "rairadio2": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Rai_Radio_2_-_Logo_2017.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "rai4k": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Rai_4K_-_Logo_2017.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "rai4": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Rai_4_-_Logo_2016.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "rai5": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Rai_5_-_Logo_2017.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -44,5 +43,8 @@
   "realtime": "https://d2v9mhsiek5lbq.cloudfront.net/eyJidWNrZXQiOiJsb21hLW1lZGlhLWl0Iiwia2V5IjoicmVhbHRpbWUtaXQtaW1hZ2UtNzZiNDVjYmMtMWVkNi00NDcxLThjZDQtMjU0YmExNmE1OWNhLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAyNCwiZml0IjoiaW5zaWRlIn19fQ==",
   "warnertv": "https://d2v9mhsiek5lbq.cloudfront.net/eyJidWNrZXQiOiJsb21hLW1lZGlhLWl0Iiwia2V5Ijoid2FybmVydHZpdC1pdC1pbWFnZS1lZTgxOTlkZC01MjlhLTQyNjItYTEyMy01ZGZjOTg0OGFhMTEucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjoxMDI0LCJmaXQiOiJpbnNpZGUifX19",
   "frisbee": "https://upload.wikimedia.org/wikipedia/commons/9/9a/FRISBEE_LOGO_2015.png?utm_source=it.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
-  "k2": "https://upload.wikimedia.org/wikipedia/commons/b/b4/K2_new_logo.svg"
+  "k2": "https://upload.wikimedia.org/wikipedia/commons/b/b4/K2_new_logo.svg",
+  "la7cinema": "https://www.la7.it/sites/default/themes/la7/newcss/assets/img/la7cinema_logo.svg",
+  "sanmarinortv": "https://www.sanmarinortv.sm/assets/frontend/img/logo-share.jpg",
+  "sanmarinortvsport": "https://www.sanmarinortv.sm/assets/frontend/img/footer-logo-sport-bn.png"
 }

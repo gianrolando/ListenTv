@@ -10,6 +10,8 @@ import org.json.*;
 /** Persistent IDs are exposed to Android Auto; URLs are resolved only at play time. */
 public final class Catalog {
     public record Channel(String id, String name, String provider, String key) {
+        /** UI grouping is independent from the broadcaster used for playback. */
+        public String group() { return id.equals("tv8") ? "discovery" : provider; }
         public MediaItem item(Context context) {
             MediaMetadata.Builder metadata=new MediaMetadata.Builder().setTitle(name)
                 .setArtist(context.getString(R.string.live_audio)).setIsBrowsable(false).setIsPlayable(true);
@@ -28,7 +30,6 @@ public final class Catalog {
             new Channel("rai3", "Rai 3", "rai", "Rai 3"),
             new Channel("rainews", "Rai News 24", "rai", "Rai News 24"),
             new Channel("raisport", "Rai Sport", "rai", "Rai Sport"),
-            new Channel("rairadio2", "Rai Radio 2", "rai", "Rai Radio 2"),
             new Channel("rai4k", "Rai 4K", "rai", "Rai 4K"),
             new Channel("rai4", "Rai 4", "rai", "Rai 4"),
             new Channel("rai5", "Rai 5", "rai", "Rai 5"),
@@ -68,6 +69,9 @@ public final class Catalog {
             new Channel("cielo", "Cielo", "sky", "2"),
             new Channel("tv8", "TV8", "sky", "7"),
             new Channel("la7", context.getString(R.string.la7_experimental), "la7", ""),
+            new Channel("la7cinema", "La7 Cinema", "la7", "cinema"),
+            new Channel("sanmarinortv", "San Marino RTV", "sanmarino", "0"),
+            new Channel("sanmarinortvsport", "San Marino RTV Sport", "sanmarino", "1"),
             new Channel("tv2000", "TV2000", "tv2000", "4Y3ZMmvcvo")
         ));
         try {

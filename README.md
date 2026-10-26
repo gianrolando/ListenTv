@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.1.0 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.2.0 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -11,8 +11,9 @@ Copyright © 2026 Gianrolando Scaringi.
 - Audio-only Media3 playback, including screen-off listening and media controls.
 - Native dark interface, channel logos, search and broadcaster/favorites filters.
 - Android Auto media catalog with persistent favorites and 512-pixel artwork.
-- All 15 channels in RaiPlay's current live catalog, 15 free-to-air Mediaset
-  channels, 11 Warner Bros. Discovery channels, Sky TG24, Cielo, TV8, La7 and TV2000.
+- 14 Rai television channels (Rai Radio 2 visual radio excluded), 15 free-to-air Mediaset
+  channels, 11 Warner Bros. Discovery channels, Sky TG24, Cielo, TV8, La7,
+  La7 Cinema, San Marino RTV, San Marino RTV Sport and TV2000.
 - Custom direct HTTPS HLS, DASH and audio sources.
 - English and Italian interface, selected from the device language.
 - In-app copyright, GPL license text and third-party credits, available offline.
@@ -22,11 +23,25 @@ MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
 All channel logos are bundled, so displaying them does not require a network
 request. Logos and television content belong to their respective owners.
 
+## Catalog changes — 1.2.0
+
+Rai Radio 2 has been removed as requested. La7 Cinema, San Marino RTV and
+San Marino RTV Sport have been added under **More** (Italian: **Altri**).
+TV8 is shown in the **Discovery** filter as a user-selected grouping; its
+actual broadcaster attribution and Sky playback resolver are preserved.
+There are 48 television entries: 14 Rai, 15 Mediaset, 12 in the Discovery
+filter (including TV8), and 7 under More.
+
+La7 Cinema uses its official live page and standard Widevine authorization.
+Both San Marino channels resolve fresh, signed HLS URLs from the broadcaster's
+official ACD player each time playback starts. No expiring stream URL is bundled.
+
 ## Expanded channel catalog — 1.1.0
 
-Rai: Rai 1, Rai 2, Rai 3, Rai News 24, Rai Sport, Rai Radio 2 visual radio,
+Rai: Rai 1, Rai 2, Rai 3, Rai News 24, Rai Sport,
 Rai 4K, Rai 4, Rai 5, Rai Movie, Rai Premium, Rai Storia, Italiana, Rai Yoyo and
-Rai Gulp. Names follow the current official live catalog (including Italiana).
+Rai Gulp. The 1.1.0 release also included Rai Radio 2 visual radio, removed in
+1.2.0. Names follow the current official live catalog (including Italiana).
 Rai marks use color vector originals rasterized at high resolution; the new
 Italiana mark uses the official RaiPlay asset and its channel background color.
 
@@ -47,7 +62,7 @@ private release signing key is used.
 
 ## Install the stable app
 
-Install the signed `ListenTv-1.1.0.apk` from the private release package supplied
+Install the signed `ListenTv-1.2.0.apk` from the private release package supplied
 by the project owner. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 

@@ -71,3 +71,16 @@ the broadcaster's Aurora site configurations through its official image
 service. SVGs are rasterized and transparent padding is trimmed, preserving
 colors and proportions. Exact original/image-service URLs are recorded in
 CHANNEL_LOGOS.json. No logo is relicensed under the source-code GPL.
+
+## Additional television channels — 1.2.0
+
+The La7 Cinema procedure follows WorldLiveTV's broadcaster/la7.py hotfix
+(2026-04-19), by WLTV Group, GPL-3.0-or-later. The San Marino live-player
+procedure follows broadcaster/smtv.py from WorldLiveTV 1.2.14. The Java
+adaptation preserves HTTPS certificate validation and resolves fresh URLs
+without persisting guest credentials or signed media URLs.
+
+La7 Cinema and San Marino channel logos come from the broadcasters' official
+websites, listed in CHANNEL_LOGOS.json. Marks retain their original ownership.
+TV8's placement in the Discovery UI filter is a user-selected grouping, not
+an assertion of broadcaster ownership; TV8's Sky source and attribution remain.

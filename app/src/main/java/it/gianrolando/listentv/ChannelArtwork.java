@@ -34,7 +34,6 @@ final class ChannelArtwork {
             case "la7" -> R.drawable.logo_la7;
             case "tv2000" -> R.drawable.logo_tv2000;
             case "raisport" -> R.drawable.logo_raisport;
-            case "rairadio2" -> R.drawable.logo_rairadio2;
             case "rai4k" -> R.drawable.logo_rai4k;
             case "rai4" -> R.drawable.logo_rai4;
             case "rai5" -> R.drawable.logo_rai5;
@@ -55,14 +54,17 @@ final class ChannelArtwork {
             case "warnertv" -> R.drawable.logo_warnertv;
             case "k2" -> R.drawable.logo_k2;
             case "frisbee" -> R.drawable.logo_frisbee;
+            case "la7cinema" -> R.drawable.logo_la7cinema;
+            case "sanmarinortv" -> R.drawable.logo_sanmarinortv;
+            case "sanmarinortvsport" -> R.drawable.logo_sanmarinortvsport;
             default -> 0;
         };
     }
     static int background(String id) {
         return switch(id) {
-            case "rai1","rai2","rai3","rainews","raisport","rairadio2","rai4k","rai4","rai5","raimovie","raipremium","raistoria","raiyoyo","raigulp" -> Color.rgb(243,246,251);
+            case "rai1","rai2","rai3","rainews","raisport","rai4k","rai4","rai5","raimovie","raipremium","raistoria","raiyoyo","raigulp" -> Color.rgb(243,246,251);
             case "italiana" -> Color.rgb(5,50,93);
-            case "skytg24","cielo","tv8","tv2000","rete4","canale5","italia1","tgcom24","mediaset20","iris","la5","mediasetextra","focus","topcrime","italia2","cine34","twentyseven","boing","cartoonito" -> Color.rgb(243,246,251);
+            case "sanmarinortvsport","skytg24","cielo","tv8","tv2000","rete4","canale5","italia1","tgcom24","mediaset20","iris","la5","mediasetextra","focus","topcrime","italia2","cine34","twentyseven","boing","cartoonito" -> Color.rgb(243,246,251);
             default -> Color.rgb(33,46,65);
         };
     }

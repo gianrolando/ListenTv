@@ -17,7 +17,7 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/1.1.0 (Android; audio player)";
+    static final String USER_AGENT="listentv/1.2.0 (Android; audio player)";
     static final class HttpStatusException extends IOException {
         final int status;
         HttpStatusException(int status) { super("HTTP "+status); this.status=status; }
@@ -33,7 +33,8 @@ public final class StreamResolver {
             case "rai" -> rai(channel.key());
             case "sky" -> plain(json("https://video.sky.it/api/v1/getLivestream?id="+channel.key()+"&isMobile=false").getString("streaming_url"));
             case "tv2000" -> tv2000(channel.key());
-            case "la7" -> la7();
+            case "la7" -> la7(channel.key());
+            case "sanmarino" -> sanMarino(channel.key());
             default -> plain(channel.key());
         };
         requireHttps(s.url());
@@ -91,15 +92,28 @@ public final class StreamResolver {
         }
         throw new IOException("TV2000 source not found.");
     }
-    private Source la7() throws Exception {
-        String body=get("https://www.la7.it/dirette-tv",Map.of());
+    private Source la7(String key) throws Exception {
+        String page=switch(key) {
+            case "" -> "https://www.la7.it/dirette-tv";
+            case "cinema" -> "https://www.la7.it/live-la7cinema";
+            default -> throw new IOException("Unknown La7 channel.");
+        };
+        String body=get(page,Map.of());
         String dash=match(body,"[\"']?dash[\"']?\\s*:\\s*[\"']([^\"']+)[\"']");
         String tokenUrl=match(body,"preTokenUrl\\s*=\\s*[\"']([^\"']+)[\"']");
-        tokenUrl=new URI("https://www.la7.it/dirette-tv").resolve(tokenUrl).toString();
+        tokenUrl=new URI(page).resolve(tokenUrl).toString();
         String token=json(tokenUrl).getString("preAuthToken");
         return new Source(dash.replace("\\/","/"),
             "https://la7.prod.conax.cloud/widevine/license?d="+(System.currentTimeMillis()/1000),
-            Map.of("preAuthorization",token,"Origin","https://www.la7.it","Referer","https://www.la7.it/"));
+            Map.of("preAuthorization",token,"Origin","https://www.la7.it","Referer","https://www.la7.it/"),
+            androidx.media3.common.MimeTypes.APPLICATION_MPD);
+    }
+    private Source sanMarino(String key) throws Exception {
+        if(!key.equals("0") && !key.equals("1")) throw new IOException("Unknown San Marino RTV channel.");
+        // Resolve fresh signed URLs from the official player on every playback.
+        String page=get("https://catchup.acdsolutions.it/jstag/videoplayerLiveFluid/TV?ch="+key+
+            "&eID=livePlayerPageElement&vID=666666666&autoPlay=true",Map.of());
+        return new Source(LivePageSources.hls(page),null,Map.of(),androidx.media3.common.MimeTypes.APPLICATION_M3U8);
     }
     private String match(String body,String regex) throws IOException {
         Matcher m=Pattern.compile(regex).matcher(body);

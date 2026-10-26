@@ -130,3 +130,18 @@ Repository visibility remains private; no public publication is authorized.
 - Offline GPL and component-credit assets verified in the final signed APK.
 - A later verification-only commit does not change the compiled application source.
 - Phone and tablet emulator capture job passed; reviewed color Rai logos, catalog count (46), and Discovery filter. Runtime capture contains no Java fatal exception.
+
+## Catalog corrections — 1.2.0 (2026-10-26)
+
+- Removed Rai Radio 2; retained stable IDs for all other existing channels.
+- UI grouping is separate from playback-provider selection; TV8 uses the Sky
+  resolver but appears under the requested Discovery filter.
+- Added La7 Cinema, San Marino RTV and RTV Sport (48 entries total).
+- Compared La7's live-la7cinema integration with the WorldLiveTV hotfix.
+- La7 Cinema's live page, pre-authorization and DASH manifest returned HTTP 200.
+- Both official San Marino player scripts, HLS masters and media playlists
+  returned HTTP 200. URLs are resolved at runtime, not copied into the catalog.
+- Added parser regression tests for signed-path preservation, escaped player
+  source URLs, and rejection of insecure/credential-bearing sources.
+- Uses the same stable release signing key; Android Auto hardware playback
+  and Widevine license/decode remain physical-device checks.
