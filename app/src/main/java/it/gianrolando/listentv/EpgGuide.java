@@ -63,11 +63,11 @@ final class EpgGuide {
                 byte[] compressed=download();
                 try(InputStream in=new XZInputStream(new ByteArrayInputStream(compressed),32768)) {programmes.addAll(EpgXmlTv.read(in,known,now));}
                 downloaded=!programmes.isEmpty();android.util.Log.i("ListenTvGuide","Parsed "+programmes.size()+" guide programmes");if(downloaded)publish(programmes);
-            } catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Guide feed unavailable",unavailable);for(var list:schedules.values())programmes.addAll(list);}
+            } catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Guide feed unavailable: "+unavailable.getClass().getSimpleName()+": "+unavailable.getMessage(),unavailable);for(var list:schedules.values())programmes.addAll(list);}
             // Use official schedules where XMLTV has an obsolete name or placeholder.
             for(var fallback:Map.of("italiana","italiana","rai4k","rai-4k").entrySet()) {
                 List<EpgProgramme> extra;
-                try {extra=raiSchedule(fallback.getKey(),fallback.getValue(),now);}catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Rai schedule unavailable: "+fallback.getKey(),unavailable);extra=schedules.getOrDefault(fallback.getKey(),List.of());}
+                try {extra=raiSchedule(fallback.getKey(),fallback.getValue(),now);}catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Rai schedule unavailable: "+fallback.getKey()+" "+unavailable.getClass().getSimpleName()+": "+unavailable.getMessage(),unavailable);extra=schedules.getOrDefault(fallback.getKey(),List.of());}
                 if(!extra.isEmpty()){programmes.removeIf(p->p.channel().equals(fallback.getKey()));programmes.addAll(extra);}
             }
             if(!programmes.isEmpty()) {
