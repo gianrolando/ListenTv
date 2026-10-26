@@ -26,7 +26,7 @@ public final class MainActivity extends Activity {
     private final android.os.Handler guideTimer=new android.os.Handler(android.os.Looper.getMainLooper());
     private final Map<String,TextView> programmeTitles=new HashMap<>(),programmeTimes=new HashMap<>();
     private final Map<String,ProgressBar> programmeProgress=new HashMap<>();
-    private final Runnable guideChanged=()->{if(!query.trim().isEmpty())renderChannels();else updateGuideViews();update();};
+    private final Runnable guideChanged=()->{if(!this.query.trim().isEmpty())renderChannels();else updateGuideViews();update();};
     private final Runnable guideTick=new Runnable() {public void run() {
         if(guide!=null){guide.ensureFresh();guideChanged.run();guideTimer.postDelayed(this,30000);}
     }};
