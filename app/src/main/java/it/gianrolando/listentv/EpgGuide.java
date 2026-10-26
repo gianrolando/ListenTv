@@ -54,6 +54,7 @@ final class EpgGuide {
         try {
             if(!loaded)loadCache();
             long now=System.currentTimeMillis(),age=now-updated;
+            android.util.Log.i("ListenTvGuide","Guide refresh at "+java.time.Instant.ofEpochMilli(now));
             if(updated>0 && age>=0 && age<REFRESH)return;
             Set<String> known=new HashSet<>();for(var channel:new Catalog(context).all())if(!channel.provider().equals("direct"))known.add(channel.id());
             List<EpgProgramme> programmes=new ArrayList<>();
@@ -61,7 +62,7 @@ final class EpgGuide {
             try {
                 byte[] compressed=download();
                 try(InputStream in=new XZInputStream(new ByteArrayInputStream(compressed),32768)) {programmes.addAll(EpgXmlTv.read(in,known,now));}
-                downloaded=!programmes.isEmpty();if(downloaded)publish(programmes);
+                downloaded=!programmes.isEmpty();android.util.Log.i("ListenTvGuide","Parsed "+programmes.size()+" guide programmes");if(downloaded)publish(programmes);
             } catch(Exception unavailable) {android.util.Log.w("ListenTvGuide","Guide feed unavailable",unavailable);for(var list:schedules.values())programmes.addAll(list);}
             // Use official schedules where XMLTV has an obsolete name or placeholder.
             for(var fallback:Map.of("italiana","italiana","rai4k","rai-4k").entrySet()) {
@@ -88,7 +89,7 @@ final class EpgGuide {
             connection.setInstanceFollowRedirects(false);connection.setConnectTimeout(6000);connection.setReadTimeout(10000);
             connection.setRequestProperty("User-Agent","WLTV ListenTv/1.3.0");
             try {
-                int status=connection.getResponseCode();
+                int status=connection.getResponseCode();android.util.Log.i("ListenTvGuide","Guide HTTP "+status+" from "+host);
                 if(status==301||status==302||status==303||status==307||status==308) {
                     String location=connection.getHeaderField("Location");if(location==null)throw new IOException("Invalid guide redirect.");
                     URI next=uri.resolve(location);

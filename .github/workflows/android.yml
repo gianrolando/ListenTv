@@ -62,8 +62,9 @@ jobs:
   ui-preview:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: ListenTv-ui-test-apk
@@ -81,6 +82,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
+          ram-size: 3072M
           script: |
             adb install apk/app-debug.apk
             adb shell settings put system screen_off_timeout 600000
@@ -88,7 +90,7 @@ jobs:
             adb shell input keyevent KEYCODE_WAKEUP
             adb shell wm dismiss-keyguard
             adb shell am start -W -n it.gianrolando.listentv/.MainActivity
-            sleep 25
+            python3 scripts/check-guide-ui.py
             mkdir -p screenshots
             adb shell screencap -p /sdcard/listentv.png
             adb pull /sdcard/listentv.png screenshots/ListenTv-phone.png
@@ -97,9 +99,8 @@ jobs:
             sleep 5
             adb shell input keyevent KEYCODE_WAKEUP
             adb shell wm dismiss-keyguard
-            adb shell am force-stop it.gianrolando.listentv
             adb shell am start -W -n it.gianrolando.listentv/.MainActivity
-            sleep 25
+            python3 scripts/check-guide-ui.py
             adb shell uiautomator dump /sdcard/listentv-ui.xml
             adb pull /sdcard/listentv-ui.xml screenshots/ListenTv-tablet-ui.xml
             adb shell screencap -p /sdcard/listentv-tablet.png
