@@ -61,7 +61,7 @@ final class EpgGuide {
             try {
                 byte[] compressed=download();
                 try(InputStream in=new XZInputStream(new ByteArrayInputStream(compressed),32768)) {programmes.addAll(EpgXmlTv.read(in,known,now));}
-                downloaded=!programmes.isEmpty();
+                downloaded=!programmes.isEmpty();if(downloaded)publish(programmes);
             } catch(Exception unavailable) {for(var list:schedules.values())programmes.addAll(list);}
             // Use official schedules where XMLTV has an obsolete name or placeholder.
             for(var fallback:Map.of("italiana","italiana","rai4k","rai-4k").entrySet()) {

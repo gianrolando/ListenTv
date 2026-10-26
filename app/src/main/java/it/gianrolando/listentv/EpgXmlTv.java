@@ -8,7 +8,8 @@ import org.xmlpull.v1.*;
 final class EpgXmlTv {
     static List<EpgProgramme> read(InputStream input,Set<String> known,long now) throws Exception {
         XmlPullParser parser=XmlPullParserFactory.newInstance().newPullParser();
-        parser.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL,false);
+        // Older pull parsers report this feature as false but reject setting it.
+        if(parser.getFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL))parser.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL,false);
         parser.setInput(new LimitedInput(input,24*1024*1024),"UTF-8");
         List<EpgProgramme> out=new ArrayList<>();
         String channel=null,title=null;long start=0,end=0;boolean root=false,inTitle=false;int programmeDepth=-1;
