@@ -20,6 +20,11 @@ public final class PlaybackService extends MediaLibraryService {
     private MediaLibrarySession session;
     private ExoPlayer player;
     private Catalog catalog;
+    private EpgGuide guide;
+    private String guideFingerprint="";
+    private final android.os.Handler guideTimer=new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable guideChanged=this::updateGuideMetadata;
+    private final Runnable guideTick=new Runnable() {public void run(){guide.ensureFresh();updateGuideMetadata();guideTimer.postDelayed(this,60000);}};
     private final ListeningExecutorService io=MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(2));
     private SharedPreferences preferences;
     private final SharedPreferences.OnSharedPreferenceChangeListener changed=(p,key)-> {
@@ -49,6 +54,23 @@ public final class PlaybackService extends MediaLibraryService {
         session=new MediaLibrarySession.Builder(this,player,new Callback()).setSessionActivity(activity).build();
         preferences=getSharedPreferences("catalog",MODE_PRIVATE);
         preferences.registerOnSharedPreferenceChangeListener(changed);
+        guide=EpgGuide.get(this);guide.addListener(guideChanged);guideTimer.post(guideTick);
+    }
+    private void updateGuideMetadata() {
+        if(session==null)return;
+        StringBuilder fingerprint=new StringBuilder();
+        for(var channel:catalog.all()) {EpgProgramme programme=guide.current(channel.id());if(programme!=null)fingerprint.append(channel.id()).append(':').append(programme.start()).append(':').append(programme.title()).append('\n');}
+        String next=fingerprint.toString();if(next.equals(guideFingerprint))return;guideFingerprint=next;
+        session.notifyChildrenChanged("all",catalog.all().size(),null);
+        session.notifyChildrenChanged("favorites",(int)catalog.all().stream().filter(c->catalog.favorite(c.id())).count(),null);
+        MediaItem current=player.getCurrentMediaItem();int index=player.getCurrentMediaItemIndex();
+        if(current!=null && index>=0) {
+            Catalog.Channel channel=catalog.find(current.mediaId);
+            if(channel!=null) {
+                MediaMetadata metadata=channel.item(this).mediaMetadata;
+                if(!metadata.equals(current.mediaMetadata))player.replaceMediaItem(index,current.buildUpon().setMediaMetadata(metadata).build());
+            }
+        }
     }
     @Override public MediaLibrarySession onGetSession(MediaSession.ControllerInfo info) { return session; }
     private MediaItem folder(String id,String title) {
@@ -111,6 +133,7 @@ public final class PlaybackService extends MediaLibraryService {
         }
     }
     @Override public void onDestroy() {
+        if(guide!=null)guide.removeListener(guideChanged);guideTimer.removeCallbacks(guideTick);
         if(preferences!=null) preferences.unregisterOnSharedPreferenceChangeListener(changed);
         if(session!=null) session.release();
         if(player!=null) player.release();

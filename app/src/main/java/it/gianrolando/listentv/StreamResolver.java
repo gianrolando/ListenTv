@@ -17,7 +17,7 @@ import android.util.Xml;
 public final class StreamResolver {
     private final android.content.Context context;
     public StreamResolver(android.content.Context context) { this.context=context.getApplicationContext(); }
-    static final String USER_AGENT="listentv/1.2.0 (Android; audio player)";
+    static final String USER_AGENT="listentv/1.3.0 (Android; audio player)";
     static final class HttpStatusException extends IOException {
         final int status;
         HttpStatusException(int status) { super("HTTP "+status); this.status=status; }

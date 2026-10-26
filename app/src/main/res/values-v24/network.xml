@@ -1,0 +1,3 @@
+<resources>
+    <bool name="guide_legacy_cleartext">false</bool>
+</resources>

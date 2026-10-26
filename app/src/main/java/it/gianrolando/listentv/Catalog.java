@@ -15,6 +15,8 @@ public final class Catalog {
         public MediaItem item(Context context) {
             MediaMetadata.Builder metadata=new MediaMetadata.Builder().setTitle(name)
                 .setArtist(context.getString(R.string.live_audio)).setIsBrowsable(false).setIsPlayable(true);
+            EpgGuide guide=EpgGuide.get(context);EpgProgramme programme=guide.current(id);
+            if(programme!=null)metadata.setArtist(programme.title()).setSubtitle(programme.title()).setDescription(guide.range(programme));
             byte[] artwork=ChannelArtwork.data(context,id);
             if(artwork!=null) metadata.setArtworkData(artwork,MediaMetadata.PICTURE_TYPE_FRONT_COVER);
             return new MediaItem.Builder().setMediaId(id).setMediaMetadata(metadata.build()).build();

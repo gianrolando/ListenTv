@@ -84,3 +84,30 @@ La7 Cinema and San Marino channel logos come from the broadcasters' official
 websites, listed in CHANNEL_LOGOS.json. Marks retain their original ownership.
 TV8's placement in the Discovery UI filter is a user-selected grouping, not
 an assertion of broadcaster ownership; TV8's Sky source and attribution remain.
+
+## Programme guide — 1.3.0
+
+Programme titles and transmission times are downloaded at runtime from the
+same public XMLTV feed configured by WorldLiveTV's lib/utils.py:
+https://epg-guide.com/wltv.xz (epg-guide.com / EPGMaker by CrAcK75).
+This feed is not bundled or redistributed with the app/source repository.
+Only the selected channels' titles and start/stop times are kept in the app's
+private cache. The guide data is not relicensed under the source-code GPL.
+Italiana and Rai 4K use official RaiPlay schedule fallbacks.
+
+XZ for Java 1.10, by the XZ for Java authors and contributors, decodes the feed
+under the BSD Zero Clause License (0BSD). Full decoder notice:
+
+Copyright (C) The XZ for Java authors and contributors
+
+Permission to use, copy, modify, and/or distribute this
+software for any purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL
+THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
+CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

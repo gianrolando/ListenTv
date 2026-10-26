@@ -156,3 +156,14 @@ Repository visibility remains private; no public publication is authorized.
 - Offline GPL and component notices verified in the signed APK.
 - A later documentation-only commit does not change compiled application source.
 - Phone/tablet emulator preview passed; reviewed a 48-channel catalog with Rai Radio 2 removed and no Java fatal exception in the captured runtime log.
+
+## On-air guide — 1.3.0 (2026-10-26)
+
+- Inspected WorldLiveTV's current XMLTV source configuration and feed.
+- Downloaded 724788 compressed bytes; 9015699 expanded bytes and 21889 programme entries at inspection.
+- Confirmed official Italiana and Rai 4K daily schedule endpoints.
+- XMLTV aliases map Rai News 24 and the legacy Motor Trend ID without mapping Italiana to obsolete Rai Scuola data.
+- Tests cover explicit time-zone/DST offsets, exact programme boundaries, expired/missing entries, placeholders, aliases, XML entities, document-type rejection and byte limits.
+- Guide requests use a separate bounded transport with an explicit redirect allowlist. HTTP is limited to the public guide mirror on Android 7+; no playback/DRM tokens enter guide requests.
+- Media metadata updates replace metadata on the existing resolved item without changing its URI/DRM configuration.
+- Physical Android Auto rendering and hardware playback remain device checks.

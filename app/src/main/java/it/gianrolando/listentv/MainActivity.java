@@ -22,6 +22,14 @@ public final class MainActivity extends Activity {
     private static final int BG=0xff0c121e, SURFACE=0xff151f30, BORDER=0xff29364c;
     private static final int INK=0xfff3f6fc, MUTED=0xff9ba9bf, MINT=0xff74ebc4, ERROR=0xffffaaab;
     private Catalog catalog;
+    private EpgGuide guide;
+    private final android.os.Handler guideTimer=new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Map<String,TextView> programmeTitles=new HashMap<>(),programmeTimes=new HashMap<>();
+    private final Map<String,ProgressBar> programmeProgress=new HashMap<>();
+    private final Runnable guideChanged=()->{if(!query.trim().isEmpty())renderChannels();else updateGuideViews();update();};
+    private final Runnable guideTick=new Runnable() {public void run() {
+        if(guide!=null){guide.ensureFresh();guideChanged.run();guideTimer.postDelayed(this,30000);}
+    }};
     private MediaBrowser browser;
     private ListenableFuture<MediaBrowser> connection;
     private SharedPreferences preferences;
@@ -74,7 +82,7 @@ public final class MainActivity extends Activity {
     }
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
-        catalog=new Catalog(this);preferences=getSharedPreferences("catalog",MODE_PRIVATE);
+        catalog=new Catalog(this);guide=EpgGuide.get(this);preferences=getSharedPreferences("catalog",MODE_PRIVATE);
         if(saved!=null) { filter=saved.getString("filter","all");query=saved.getString("query","");selectedId=saved.getString("selected",""); }
         int width=getResources().getConfiguration().screenWidthDp;
         columns=width>=840?4:width>=600?3:2;
@@ -150,11 +158,12 @@ public final class MainActivity extends Activity {
     }
     private void renderChannels() {
         if(rows==null) return;
-        rows.removeAllViews();cards.clear();cardSubtitles.clear();
+        rows.removeAllViews();cards.clear();cardSubtitles.clear();programmeTitles.clear();programmeTimes.clear();programmeProgress.clear();
         String term=query.trim().toLowerCase(Locale.ROOT);List<Catalog.Channel> visible=new ArrayList<>();
         for(Catalog.Channel channel:catalog.all()) {
             boolean match=switch(filter) {case "favorites" -> catalog.favorite(channel.id());case "rai","mediaset","discovery" -> channel.group().equals(filter);case "other" -> !Set.of("rai","mediaset","discovery").contains(channel.group());default -> true;};
-            if(match && (term.isEmpty() || (channel.name()+" "+provider(channel)).toLowerCase(Locale.ROOT).contains(term))) visible.add(channel);
+            EpgProgramme programme=guide.current(channel.id());String programmeName=programme==null?"":programme.title();
+            if(match && (term.isEmpty() || (channel.name()+" "+provider(channel)+" "+programmeName).toLowerCase(Locale.ROOT).contains(term))) visible.add(channel);
         }
         resultCount.setText(getResources().getQuantityString(R.plurals.channel_count,visible.size(),visible.size()));
         if(visible.isEmpty()) {
@@ -171,7 +180,7 @@ public final class MainActivity extends Activity {
             }
             LinearLayout.LayoutParams lineParams=new LinearLayout.LayoutParams(-1,-2);lineParams.bottomMargin=dp(12);rows.addView(line,lineParams);
         }
-        highlightCards();
+        highlightCards();updateGuideViews();
     }
     private View channelCard(Catalog.Channel channel) {
         LinearLayout card=vertical();card.setPadding(dp(12),dp(12),dp(8),dp(8));card.setMinimumHeight(dp(144));
@@ -189,7 +198,30 @@ public final class MainActivity extends Activity {
         caption.addView(text,new LinearLayout.LayoutParams(0,-2,1));
         boolean favorite=catalog.favorite(channel.id());ImageButton star=iconButton(UiIcon.STAR,getString(favorite?R.string.remove_favorite:R.string.add_favorite,channel.name()),favorite?MINT:MUTED,Color.TRANSPARENT);
         star.setOnClickListener(view->{catalog.toggle(channel.id());renderChannels();});caption.addView(star,new LinearLayout.LayoutParams(dp(44),dp(48)));
-        LinearLayout.LayoutParams captionParams=new LinearLayout.LayoutParams(-1,-2);captionParams.topMargin=dp(5);card.addView(caption,captionParams);cards.put(channel.id(),card);return card;
+        LinearLayout.LayoutParams captionParams=new LinearLayout.LayoutParams(-1,-2);captionParams.topMargin=dp(5);card.addView(caption,captionParams);cards.put(channel.id(),card);
+        TextView programme=label("",13,INK,false);programme.setMaxLines(2);programme.setMinLines(2);programme.setEllipsize(TextUtils.TruncateAt.END);
+        programme.setLineSpacing(dp(2),1);LinearLayout.LayoutParams programmeParams=new LinearLayout.LayoutParams(-1,-2);programmeParams.topMargin=dp(8);programmeParams.rightMargin=dp(4);card.addView(programme,programmeParams);
+        TextView time=label("",11,MUTED,false);LinearLayout.LayoutParams timeParams=new LinearLayout.LayoutParams(-1,-2);timeParams.topMargin=dp(5);card.addView(time,timeParams);
+        ProgressBar progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);progress.setMax(100);
+        progress.setProgressTintList(ColorStateList.valueOf(MINT));progress.setProgressBackgroundTintList(ColorStateList.valueOf(BORDER));
+        LinearLayout.LayoutParams progressParams=new LinearLayout.LayoutParams(-1,dp(4));progressParams.topMargin=dp(7);progressParams.bottomMargin=dp(5);progressParams.rightMargin=dp(4);card.addView(progress,progressParams);
+        programmeTitles.put(channel.id(),programme);programmeTimes.put(channel.id(),time);programmeProgress.put(channel.id(),progress);return card;
+    }
+    private void updateGuideViews() {
+        if(guide==null)return;long now=System.currentTimeMillis();
+        for(var entry:programmeTitles.entrySet()) {
+            String id=entry.getKey();EpgProgramme programme=guide.current(id);Catalog.Channel channel=catalog.find(id);
+            TextView title=entry.getValue(),time=programmeTimes.get(id);ProgressBar progress=programmeProgress.get(id);
+            if(programme==null) {
+                title.setText(channel!=null&&channel.provider().equals("direct")?getString(R.string.live_audio):getString(guide.loading()?R.string.guide_loading:R.string.guide_unavailable));
+                title.setTextColor(MUTED);time.setText("");progress.setVisibility(View.INVISIBLE);
+                if(channel!=null)cards.get(id).setContentDescription(getString(R.string.listen_to,channel.name()));
+            } else {
+                title.setText(getString(R.string.guide_now,programme.title()));title.setTextColor(INK);time.setText(guide.range(programme));
+                progress.setVisibility(View.VISIBLE);progress.setProgress(programme.progress(now));
+                if(channel!=null)cards.get(id).setContentDescription(getString(R.string.listen_to,channel.name())+". "+title.getText()+". "+time.getText());
+            }
+        }
     }
     private void selectChannel(Catalog.Channel channel) {
         if(browser==null) { status.setText(R.string.wait_player);return; }
@@ -233,22 +265,22 @@ public final class MainActivity extends Activity {
         else if(browser==null)status.setText(R.string.connecting);
         else if(browser.getPlayerError()!=null) { status.setText(getString(R.string.playback_error,browser.getPlayerError().getErrorCodeName()));status.setTextColor(ERROR); }
         else if(resolving || browser.getPlaybackState()==Player.STATE_BUFFERING)status.setText(R.string.state_loading);
-        else if(playing)status.setText(R.string.state_live);
+        else if(playing) {EpgProgramme programme=guide.current(selectedId);status.setText(programme==null?getString(R.string.state_live):getString(R.string.state_live)+" · "+programme.title());}
         else if(current==null)status.setText(R.string.choose_channel);
         else status.setText(R.string.state_paused);
         highlightCards();
     }
     private void hideKeyboard() { search.clearFocus();InputMethodManager keyboard=getSystemService(InputMethodManager.class);if(keyboard!=null)keyboard.hideSoftInputFromWindow(search.getWindowToken(),0); }
     @Override protected void onStart() {
-        super.onStart();connection=new MediaBrowser.Builder(this,new SessionToken(this,new ComponentName(this,PlaybackService.class))).buildAsync();
+        super.onStart();guide.addListener(guideChanged);guideTimer.post(guideTick);connection=new MediaBrowser.Builder(this,new SessionToken(this,new ComponentName(this,PlaybackService.class))).buildAsync();
         final ListenableFuture<MediaBrowser> pending=connection;
         pending.addListener(()->{if(connection!=pending || pending.isCancelled())return;try{browser=pending.get();browser.addListener(listener);update();}catch(Exception error){status.setText(R.string.player_unavailable);}},this::runOnUiThread);
     }
-    @Override protected void onStop() {if(browser!=null)browser.removeListener(listener);if(connection!=null)androidx.media3.session.MediaController.releaseFuture(connection);connection=null;browser=null;super.onStop();}
+    @Override protected void onStop() {guide.removeListener(guideChanged);guideTimer.removeCallbacks(guideTick);if(browser!=null)browser.removeListener(listener);if(connection!=null)androidx.media3.session.MediaController.releaseFuture(connection);connection=null;browser=null;super.onStop();}
     @Override protected void onDestroy() {if(preferences!=null)preferences.unregisterOnSharedPreferenceChangeListener(errorListener);super.onDestroy();}
     @Override protected void onSaveInstanceState(Bundle out) {out.putString("filter",filter);out.putString("query",query);out.putString("selected",selectedId);super.onSaveInstanceState(out);}
     private void showAbout() {
-        String version="1.2.0";
+        String version="1.3.0";
         try { version=getPackageManager().getPackageInfo(getPackageName(),0).versionName; } catch(Exception ignored) { }
         TextView content=label(getString(R.string.about_body),15,INK,false);
         content.setLineSpacing(dp(5),1f);content.setPadding(dp(24),dp(12),dp(24),dp(16));content.setTextIsSelectable(true);

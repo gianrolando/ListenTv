@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.2.0 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.3.0 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -22,6 +22,31 @@ Mediaset logos use the full-color, high-resolution originals from the official
 MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
 All channel logos are bundled, so displaying them does not require a network
 request. Logos and television content belong to their respective owners.
+
+## On-air programme guide — 1.3.0
+
+Channel cards show the current programme, start/end times and a progress bar.
+Search also matches current programme titles. Media metadata carries the
+programme into Android Auto and notifications while keeping channel names.
+
+The guide downloads in the background and caches only relevant titles/times
+for up to 48 hours. It refreshes at most every six hours, with a 30-minute
+retry interval on failure; on-air selection updates as the clock advances.
+Cached entries remain usable offline until their actual end time. Missing or
+expired information shows **Programme guide unavailable** instead of an old
+programme. Custom stream URLs have no automatic guide mapping.
+
+Source: epg-guide.com's XMLTV feed, as configured by WorldLiveTV, with official
+RaiPlay fallbacks for Italiana and Rai 4K. Some source entries contain no
+programme information (notably Sky TG24, Warner TV and RTV Sport at inspection).
+Programme schedules may differ from live broadcast changes.
+
+Guide downloads are size-limited, XZ decoder memory is capped, document types
+and external entities are rejected, and feed redirects are allowlisted.
+The public guide's delivery redirects to HTTP on 116.202.210.205; Android 7+
+allows cleartext only for that exact host. Android 6 uses a manifest exception
+and the same explicit URL checks in code. Stream and authorization resolution
+still requires HTTPS. No broadcaster tokens are sent to the guide service.
 
 ## Catalog changes — 1.2.0
 
@@ -62,7 +87,7 @@ private release signing key is used.
 
 ## Install the stable app
 
-Install the signed `ListenTv-1.2.0.apk` from the private release package supplied
+Install the signed `ListenTv-1.3.0.apk` from the private release package supplied
 by the project owner. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 

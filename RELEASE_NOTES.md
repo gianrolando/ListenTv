@@ -1,15 +1,13 @@
-# ListenTv 1.2.0 — catalog corrections
+# ListenTv 1.3.0 — on-air programme guide
 
-- Remove Rai Radio 2, keeping television channels in the catalog.
-- Show TV8 in the Discovery filter, retaining the working Sky playback source.
-- Add La7 Cinema, San Marino RTV and San Marino RTV Sport under More/Altri.
-- Add the new channel logos and resolve RTV signed live URLs dynamically.
-- 48 television entries in total; existing favorites and custom sources remain.
-- Use the same permanent release key as stable 1.0.0 and 1.1.0.
+- Show current programme titles, transmission times and progress on channel cards.
+- Search by the programme currently on air as well as by channel/broadcaster.
+- Include current programme information in Android Auto/media metadata.
+- Load the WorldLiveTV XMLTV guide in the background with a bounded private cache.
+- Use official RaiPlay schedules for Italiana and Rai 4K where the shared guide lacks data.
+- Keep playback available when the guide is unavailable; never label expired entries as on air.
+- Retain the 48-channel catalog, favorites and existing release signing key.
 
-HTTP checks validated La7 Cinema's authorization and DASH manifest and both
-San Marino HLS master/media playlists. These checks do not validate hardware
-DRM decoding or physical Android Auto playback. The previously documented
-upstream K2/Frisbee availability limitation remains.
-
-The GitHub repository remains private. No public publication is included.
+Schedules depend on source coverage and may not reflect last-minute live changes.
+Missing schedules show a clear unavailable label; no guide data is bundled.
+The GitHub repository remains private.

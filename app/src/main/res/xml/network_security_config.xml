@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <!-- WorldLiveTV's public XMLTV feed redirects here. Only guide data uses HTTP. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">116.202.210.205</domain>
+    </domain-config>
+</network-security-config>

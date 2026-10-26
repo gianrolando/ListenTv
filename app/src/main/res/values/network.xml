@@ -1,0 +1,4 @@
+<resources>
+    <!-- Android 6 has no per-host policy; code restricts guide redirects explicitly. -->
+    <bool name="guide_legacy_cleartext">true</bool>
+</resources>

@@ -6,8 +6,8 @@ android {
         applicationId = "it.gianrolando.listentv"
         minSdk = 23
         targetSdk = 35
-        versionCode = 8
-        versionName = "1.2.0"
+        versionCode = 9
+        versionName = "1.3.0"
     }
     buildTypes {
         getByName("release") { isDebuggable = false; isMinifyEnabled = false }
@@ -20,6 +20,8 @@ android {
 }
 dependencies {
     testImplementation("junit:junit:4.13.2")
+    testImplementation("net.sf.kxml:kxml2:2.3.0")
+    implementation("org.tukaani:xz:1.10")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     val media3 = "1.8.0"
     implementation("androidx.media3:media3-exoplayer:$media3")
