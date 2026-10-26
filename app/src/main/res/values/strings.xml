@@ -26,14 +26,11 @@
     <string name="add">Add</string>
     <string name="playback_error">Playback interrupted. Check your connection or try the channel again. (%1$s)</string>
     <string name="live_audio">Live TV • audio only</string>
-    <string name="la7_experimental">La7 (experimental)</string>
+    <string name="la7_experimental">La7</string>
     <string name="invalid_url">Enter a valid HTTPS streaming URL.</string>
     <string name="missing_name">Enter the channel name.</string>
     <string name="unknown_channel">Unknown channel.</string>
     <string name="source_error">Cannot open %1$s. The source may have changed, be unavailable or require authorization.</string>
-    <string name="diagnostics">Diagnostics</string>
-    <string name="copy_diagnostics">Copy diagnostics</string>
-    <string name="diagnostics_copied">Diagnostics copied</string>
     <string name="close">Close</string>
     <string name="more_options">More options</string>
     <string name="search_channels">Search channels</string>
@@ -51,4 +48,10 @@
     <string name="state_paused">Playback paused</string>
     <string name="about_audio">About audio playback</string>
     <plurals name="channel_count"><item quantity="one">%d channel</item><item quantity="other">%d channels</item></plurals>
+    <string name="about_app">About ListenTv</string>
+    <string name="view_license">License</string>
+    <string name="license_title">GNU GPL v3 or later</string>
+    <string name="third_party_notices">Credits</string>
+    <string name="legal_unavailable">License information is unavailable.</string>
+    <string name="about_body">© 2026 Gianrolando Scaringi.\n\nListenTv lets you listen to live television as audio, in the background and with Android Auto.\n\nFree software under the GNU General Public License, version 3 or any later version (GPL-3.0-or-later). You may use, study, modify and redistribute the source code under that license. Supplied without warranty.\n\nSome stream resolvers are adapted from WorldLiveTV by WLTV Group. AndroidX Media3 and other components retain their respective licenses.\n\nChannel logos, names and programs belong to their respective owners. ListenTv is an independent project, with no broadcaster affiliation.</string>
 </resources>

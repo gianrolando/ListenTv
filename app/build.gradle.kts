@@ -6,8 +6,11 @@ android {
         applicationId = "it.gianrolando.listentv"
         minSdk = 23
         targetSdk = 35
-        versionCode = 5
-        versionName = "0.3.0"
+        versionCode = 6
+        versionName = "1.0.0"
+    }
+    buildTypes {
+        getByName("release") { isDebuggable = false; isMinifyEnabled = false }
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true

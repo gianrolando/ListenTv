@@ -127,9 +127,9 @@ public final class MainActivity extends Activity {
     }
     private void showMenu(View anchor) {
         PopupMenu menu=new PopupMenu(this,anchor);
-        menu.getMenu().add(0,1,0,R.string.add_source);menu.getMenu().add(0,2,1,R.string.diagnostics);menu.getMenu().add(0,3,2,R.string.about_audio);
+        menu.getMenu().add(0,1,0,R.string.add_source);menu.getMenu().add(0,2,1,R.string.about_app);menu.getMenu().add(0,3,2,R.string.about_audio);
         menu.setOnMenuItemClickListener(item->{ switch(item.getItemId()) {
-            case 1 -> addChannel();case 2 -> showDiagnostics();
+            case 1 -> addChannel();case 2 -> showAbout();
             case 3 -> new AlertDialog.Builder(this).setTitle(R.string.about_audio).setMessage(R.string.data_note).setPositiveButton(R.string.close,null).show();
             default -> { return false; }
         }return true; });menu.show();
@@ -247,9 +247,24 @@ public final class MainActivity extends Activity {
     @Override protected void onStop() {if(browser!=null)browser.removeListener(listener);if(connection!=null)androidx.media3.session.MediaController.releaseFuture(connection);connection=null;browser=null;super.onStop();}
     @Override protected void onDestroy() {if(preferences!=null)preferences.unregisterOnSharedPreferenceChangeListener(errorListener);super.onDestroy();}
     @Override protected void onSaveInstanceState(Bundle out) {out.putString("filter",filter);out.putString("query",query);out.putString("selected",selectedId);super.onSaveInstanceState(out);}
-    private void showDiagnostics() {
-        String report=Diagnostics.report(this);TextView content=label(report,13,INK,false);content.setTextIsSelectable(true);content.setPadding(dp(20),dp(12),dp(20),dp(12));ScrollView scroll=new ScrollView(this);scroll.addView(content);
-        new AlertDialog.Builder(this).setTitle(R.string.diagnostics).setView(scroll).setPositiveButton(R.string.copy_diagnostics,(dialog,which)->{ClipboardManager clipboard=getSystemService(ClipboardManager.class);if(clipboard!=null)clipboard.setPrimaryClip(ClipData.newPlainText("ListenTv diagnostics",report));Toast.makeText(this,R.string.diagnostics_copied,Toast.LENGTH_SHORT).show();}).setNegativeButton(R.string.close,null).show();
+    private void showAbout() {
+        String version="1.0.0";
+        try { version=getPackageManager().getPackageInfo(getPackageName(),0).versionName; } catch(Exception ignored) { }
+        TextView content=label(getString(R.string.about_body),15,INK,false);
+        content.setLineSpacing(dp(5),1f);content.setPadding(dp(24),dp(12),dp(24),dp(16));content.setTextIsSelectable(true);
+        ScrollView scroll=new ScrollView(this);scroll.addView(content);
+        new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)+" "+version).setView(scroll)
+            .setPositiveButton(R.string.view_license,(dialog,which)->showLegalText("LICENSE.txt",getString(R.string.license_title)))
+            .setNeutralButton(R.string.third_party_notices,(dialog,which)->showLegalText("THIRD_PARTY_NOTICES.txt",getString(R.string.third_party_notices)))
+            .setNegativeButton(R.string.close,null).show();
+    }
+    private void showLegalText(String asset,String title) {
+        String body;
+        try(java.io.InputStream in=getAssets().open(asset)) { body=BoundedResponseReader.read(in,128*1024,false); }
+        catch(Exception error) { body=getString(R.string.legal_unavailable); }
+        TextView content=label(body,12,INK,false);content.setTextIsSelectable(true);content.setPadding(dp(20),dp(12),dp(20),dp(12));
+        ScrollView scroll=new ScrollView(this);scroll.addView(content);
+        new AlertDialog.Builder(this).setTitle(title).setView(scroll).setPositiveButton(R.string.close,null).show();
     }
     private void addChannel() {
         LinearLayout form=vertical();form.setPadding(dp(20),dp(8),dp(20),0);

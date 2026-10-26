@@ -38,7 +38,7 @@ final class ChannelArtwork {
     }
     static int background(String id) {
         return switch(id) {
-            case "skytg24","cielo","tv8","tv2000" -> Color.rgb(243,246,251);
+            case "skytg24","cielo","tv8","tv2000","rete4","canale5","italia1","tgcom24","mediaset20","iris","la5","mediasetextra","focus","topcrime","italia2","cine34","twentyseven","boing","cartoonito" -> Color.rgb(243,246,251);
             default -> Color.rgb(33,46,65);
         };
     }
@@ -47,11 +47,11 @@ final class ChannelArtwork {
         return CACHE.computeIfAbsent(id,key-> {
             Bitmap source=BitmapFactory.decodeResource(context.getResources(),res);
             if(source==null) return null;
-            Bitmap output=Bitmap.createBitmap(256,256,Bitmap.Config.ARGB_8888);
+            Bitmap output=Bitmap.createBitmap(512,512,Bitmap.Config.ARGB_8888);
             Canvas canvas=new Canvas(output);canvas.drawColor(background(id));
-            float scale=Math.min(192f/source.getWidth(),160f/source.getHeight());
+            float scale=Math.min(448f/source.getWidth(),384f/source.getHeight());
             float width=source.getWidth()*scale,height=source.getHeight()*scale;
-            canvas.drawBitmap(source,null,new RectF((256-width)/2,(256-height)/2,(256+width)/2,(256+height)/2),new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
+            canvas.drawBitmap(source,null,new RectF((512-width)/2,(512-height)/2,(512+width)/2,(512+height)/2),new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();output.compress(Bitmap.CompressFormat.PNG,100,bytes);
             source.recycle();output.recycle();return bytes.toByteArray();
         });

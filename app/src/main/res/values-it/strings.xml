@@ -26,14 +26,11 @@
     <string name="add">Aggiungi</string>
     <string name="playback_error">Ascolto interrotto. Verifica la connessione o riprova il canale. (%1$s)</string>
     <string name="live_audio">Diretta TV • solo audio</string>
-    <string name="la7_experimental">La7 (sperimentale)</string>
+    <string name="la7_experimental">La7</string>
     <string name="invalid_url">Inserisci un URL streaming HTTPS valido.</string>
     <string name="missing_name">Inserisci il nome del canale.</string>
     <string name="unknown_channel">Canale sconosciuto.</string>
     <string name="source_error">Impossibile aprire %1$s. La sorgente può essere cambiata, non disponibile o richiedere autorizzazione.</string>
-    <string name="diagnostics">Diagnostica</string>
-    <string name="copy_diagnostics">Copia diagnostica</string>
-    <string name="diagnostics_copied">Diagnostica copiata</string>
     <string name="close">Chiudi</string>
     <string name="more_options">Altre opzioni</string>
     <string name="search_channels">Cerca un canale</string>
@@ -51,4 +48,10 @@
     <string name="state_paused">Ascolto in pausa</string>
     <string name="about_audio">Informazioni sull’ascolto</string>
     <plurals name="channel_count"><item quantity="one">%d canale</item><item quantity="many">%d canali</item><item quantity="other">%d canali</item></plurals>
+    <string name="about_app">Informazioni su ListenTv</string>
+    <string name="view_license">Licenza</string>
+    <string name="license_title">GNU GPL v3 o successiva</string>
+    <string name="third_party_notices">Crediti</string>
+    <string name="legal_unavailable">Informazioni sulla licenza non disponibili.</string>
+    <string name="about_body">© 2026 Gianrolando Scaringi.\n\nListenTv permette di ascoltare l’audio delle dirette televisive, in background e con Android Auto.\n\nSoftware libero con licenza GNU General Public License, versione 3 o successiva (GPL-3.0-or-later). Puoi usare, studiare, modificare e ridistribuire il codice nel rispetto della licenza. Fornito senza garanzie.\n\nAlcuni risolutori sono adattati da WorldLiveTV di WLTV Group. AndroidX Media3 e gli altri componenti mantengono le rispettive licenze.\n\nLoghi, nomi e programmi dei canali appartengono ai rispettivi titolari. ListenTv è un progetto indipendente, non affiliato alle emittenti.</string>
 </resources>

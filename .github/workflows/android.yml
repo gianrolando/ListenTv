@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build ListenTv
 on:
   workflow_dispatch:
   push:
@@ -23,24 +23,36 @@ jobs:
         with:
           gradle-version: '8.11.1'
       - name: Run regression tests, build APK and run Android lint
-        run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
+        run: gradle --no-daemon :app:testReleaseUnitTest :app:assembleRelease :app:assembleDebug :app:lintRelease
+      - name: Prepare unsigned release for private local signing
+        run: |
+          mkdir -p release-build
+          cp app/build/outputs/apk/release/app-release-unsigned.apk release-build/ListenTv-1.0.0-unsigned.apk
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" release-build/apksigner.jar
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging release-build/ListenTv-1.0.0-unsigned.apk > release-build/build-info.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: ListenTv-0.3.0-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: ListenTv-1.0.0-unsigned-build
+          path: release-build/*
           if-no-files-found: error
           retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ListenTv-ui-test-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
       - name: Print lint diagnostics
         if: always()
         run: |
-          report="app/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt"
+          report="app/build/intermediates/lint_intermediate_text_report/release/lintReportRelease/lint-results-release.txt"
           if [ -f "$report" ]; then cat "$report"; fi
       - name: Upload lint reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: listentv-lint-report
-          path: app/build/reports/lint-results-debug.*
+          path: app/build/reports/lint-results-release.*
           if-no-files-found: ignore
           retention-days: 30
 
@@ -51,7 +63,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ListenTv-0.3.0-debug
+          name: ListenTv-ui-test-apk
           path: apk
       - name: Enable KVM
         run: |

@@ -41,3 +41,16 @@ are listed in `CHANNEL_LOGOS.json`. La7 and TV2000 SVG originals were rasterized
 for Android display. Logos are broadcaster trademarks/artwork and are not
 relicensed under the source code GPL license. Their inclusion identifies the
 channels and does not imply affiliation or endorsement.
+
+## Mediaset artwork update — 1.0.0
+
+The previous 100-pixel TV catalog thumbnails have been replaced with full-color
+560-pixel originals from MFE/Mediaset's corporate channel gallery:
+https://www.mfemediaforeurope.com/it/gruppo/tv-radio/
+Exact image URLs remain in CHANNEL_LOGOS.json. Transparent padding was cropped
+without altering the marks. Android Auto/media artwork is rendered at 512x512
+with an appropriate background and lossless PNG encoding.
+
+Copyright for original ListenTv code: © 2026 Gianrolando Scaringi.
+Adapted WorldLiveTV code retains WLTV Group attribution and GPL-3.0-or-later.
+Channel artwork is not relicensed under the GPL source-code license.

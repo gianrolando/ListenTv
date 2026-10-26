@@ -1,189 +1,94 @@
 # ListenTv
 
-Listen to live TV channels as audio, with background playback and Android Auto support.
+Listen to live television as audio, with background playback and Android Auto.
 
-**Version 0.3.0 · Android prototype · GPL-3.0-or-later**
+**Stable version 1.0.0 · Android 6.0+ · GPL-3.0-or-later**
 
-listentv is a native Android app that plays the audio from live television streams.
-It disables video and subtitle tracks and exposes a media catalog for Android Auto.
-The interface follows the device language: English by default, Italian on Italian devices.
-
-> This is an early prototype. Channel playback and Android Auto integration still
-> require testing on real devices. Source code support does not guarantee that a
-> broadcaster's live service is currently accessible.
+Copyright © 2026 Gianrolando Scaringi.
 
 ## Features
 
-- Media3/ExoPlayer playback hosted in a `MediaLibraryService`.
-- Background and screen-off playback, media notification and playback controls.
-- Audio focus handling and pause when the audio output is disconnected.
-- All channels and persistent favorites in the phone app and Android Auto catalog.
-- Stream resolution at playback time rather than storing temporary source URLs.
-- Custom direct HTTPS HLS, DASH and audio sources; long-press to remove them.
-- English and Italian interface resources, including Android Auto folder labels.
-- GitHub Actions build and Android lint checks.
+- Audio-only Media3 playback, including screen-off listening and media controls.
+- Native dark interface, channel logos, search and broadcaster/favorites filters.
+- Android Auto media catalog with persistent favorites and 512-pixel artwork.
+- Rai 1, Rai 2, Rai 3, Rai News 24, 15 free-to-air Mediaset channels, Sky TG24,
+  Cielo, TV8, La7 and TV2000 integrations.
+- Custom direct HTTPS HLS, DASH and audio sources.
+- English and Italian interface, selected from the device language.
+- In-app copyright, GPL license text and third-party credits, available offline.
 
-## Channel integrations
+Mediaset logos use the full-color, high-resolution originals from the official
+MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
+All channel logos are bundled, so displaying them does not require a network
+request. Logos and television content belong to their respective owners.
 
-| Channels | Implemented source procedure | Playback validation |
-| --- | --- | --- |
-| Rai 1, Rai 2, Rai 3, Rai News 24 | RaiPlay catalog and relinker; Widevine configuration when supplied | Pending |
-| Rete 4, Canale 5, Italia 1, TGcom24, 20 Mediaset, Iris, La5, Mediaset Extra, Focus, Top Crime, Italia 2, Cine34, 27 Twentyseven, Boing, Cartoonito | Mediaset guest authorization, playback check, DASH selection and Widevine license configuration | API resolution checked; device playback pending |
-| Sky TG24, Cielo, TV8 | Sky live API | Pending |
-| TV2000 | Meride/Play2000 XML configuration | Pending |
-| La7 | Live page, preauthorization and Widevine license configuration | Experimental; pending |
-| Custom sources | Direct HTTPS URLs supported by Media3 | Depends on source |
+## Install the stable app
 
-Mediaset uses a fresh anonymous guest session for each playback request. No account
-credentials are requested and tokens are not saved. Its standard playback check
-controls access; protected streams use the license service with Android Widevine.
-Account-only or subscription content is not included.
+Install the signed `ListenTv-1.0.0.apk` from the private release package supplied
+by the project owner. The stable release is signed with a dedicated release key,
+and is not a debug build. Keep using the same release key for subsequent updates.
 
-Provider procedures are adapted from WorldLiveTV; Kodi is not required.
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution.
-There is no DRM or geographic restriction bypass. Availability depends on each
-broadcaster, its authorization service and the device. Sources can change.
+Earlier 0.x development APKs have a different debug signature. Android requires
+uninstalling that development app before installing 1.0.0; that clears local
+favorites and custom sources. Later releases signed with the same release key
+can update the stable app normally.
 
-## Audio only and mobile data
+The repository remains private. No public release or Play Store publication is
+part of this delivery. GitHub Actions' **unsigned release build** is a developer
+input to signing and cannot be installed directly.
 
-Disabling video playback does **not** guarantee audio-only network traffic.
-When a source provides a separate audio rendition, the player may use it. When
-video and audio share the same segments, both may still need to be downloaded.
-Data use must be measured per source. No cloud transcoding service is included.
+## Use
 
-## Download a test APK
+Tap a channel card to listen. The player remains at the bottom of the screen.
+Use the star for favorites, search by channel/broadcaster and use the filter
+chips to narrow the catalog. The top-right menu offers custom sources,
+**About ListenTv** and audio playback information. About includes copyright,
+GPL license text and component credits. The diagnostics menu has been removed.
+Long-press a custom source to remove it.
 
-1. Open this repository's [Actions tab](https://github.com/gianrolando/listentv/actions).
-2. Select **Build Android APK** and open a successful run. Pushes to `main` build
-   automatically; **Run workflow** also starts a manual build.
-3. Under **Artifacts**, download **ListenTv-0.3.0-debug** and extract it.
-4. Transfer `app-debug.apk` to an Android phone and allow installation from the
-   app used to open the file if Android asks.
+## Android Auto
 
-The artifact is available only after a successful build and is retained for
-30 days. GitHub access is required while the repository is private.
-The APK is debug-signed for testing; it is not a Google Play release. Debug keys
-may change across runners, which can require uninstalling a previous test build.
-Stable updates need a persistent signing key. Never commit signing keys or secrets.
+The app exposes a browsable media library and media artwork. For a manually
+installed media app, enable Android Auto developer settings and **Unknown
+sources**, then reconnect and check launcher customization. Test while parked.
+Android Auto chooses its own layout and may scale or cache channel artwork.
 
-## Build locally
+## Streaming and data usage
 
-Requirements: JDK 17, Android SDK platform 35, and Gradle 8.11.1.
-Pinned dependencies include Android Gradle Plugin 8.9.2 and Media3 1.8.0.
-There is no Gradle Wrapper yet; install the specified Gradle version or generate
-one using your local Gradle installation.
+The player disables video and subtitle tracks. Data usage depends on each
+source: separate audio renditions can save data, while multiplexed streams can
+still carry video bytes. No conversion server or cloud transcoder is used.
+Mediaset uses guest authorization and standard Widevine licenses; passwords,
+subscription access and geographic restriction bypass are not implemented.
+Broadcasters can change their endpoints or availability.
+
+## Build and sign
+
+Use JDK 17, Android SDK 35 and Gradle 8.11.1. Android Gradle Plugin 8.9.2 and
+Media3 1.8.0 remain pinned. This project does not yet include a Gradle Wrapper.
 
 ```sh
-git clone https://github.com/gianrolando/listentv.git
-cd listentv
-gradle :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
+gradle :app:testReleaseUnitTest :app:assembleRelease :app:lintRelease
 ```
 
-Configure the Android SDK using `ANDROID_HOME` or a local `local.properties` file.
-The APK is written to `app/build/outputs/apk/debug/app-debug.apk`.
-Minimum Android version: Android 6.0 (API 23).
+The release APK is unsigned at `app/build/outputs/apk/release/app-release-unsigned.apk`.
+Sign it locally using `scripts/sign-release.sh`, Android SDK's `apksigner.jar`
+and the owner's private PKCS12 release keystore. Follow the script's usage.
+The signing key and passwords must never be committed or uploaded to this repo.
+No signing credentials are stored in GitHub Actions or its artifacts.
 
-## Use on a phone
+Actions runs regression tests, compiles the release and captures the UI on a
+phone/tablet emulator using a separate debug-only UI test APK. The signing
+runtime/tools are not included in the app. See VERIFICATION.md for validation.
 
-Select a channel to start listening and use the star to add it to favorites.
-**Pause** suspends playback, **Resume** continues the loaded stream, and **Stop**
-stops the player. After a long pause, select the channel again to renew temporary
-URLs or authorization. Custom sources must be direct HTTPS streams, not web pages.
-Long-press a custom channel to remove it.
+## License and credits
 
-## Test with Android Auto
+GNU General Public License, version 3 or any later version (GPL-3.0-or-later).
+See LICENSE for the full terms and disclaimer of warranty. This choice preserves
+the license of the adapted WorldLiveTV provider procedures by WLTV Group.
 
-The app declares Android Auto media support and provides a browsable media
-service. Actual compatibility has not yet been verified on a phone or head unit.
+AndroidX Media3 and Guava are Apache-2.0 components; other dependencies retain
+their licenses. See THIRD_PARTY_NOTICES.md and CHANNEL_LOGOS.json. Broadcaster
+marks are not covered by the GPL and their use does not imply endorsement.
 
-For a sideloaded media app, enable Android Auto developer settings by repeatedly
-tapping its version entry, then enable **Unknown sources** in those settings.
-Reconnect the phone and look for **listentv** in the launcher. Check launcher
-customization if needed. Menus vary by Android Auto version and device.
-Use a parked vehicle or Google's Desktop Head Unit for interactive testing.
-
-Play Store distribution additionally requires release signing, a privacy policy
-and compliance with Google's current car app review requirements.
-
-## Known limitations and validation
-
-No EPG, voice search, M3U import, recording, Mediaset account login, traffic meter or
-custom long-outage reconnection logic is implemented. Normal player retries
-are provided by ExoPlayer. Low-level provider diagnostics are in English.
-
-See [VERIFICATION.md](VERIFICATION.md) for validation status and the device test
-checklist. A successful APK build does not establish that individual channels or
-Android Auto work on real devices.
-
-## Development
-
-Application ID and Java namespace: `it.gianrolando.listentv`.
-Keep user-facing strings in `app/src/main/res/values/strings.xml` and provide
-Italian translations in `app/src/main/res/values-it/strings.xml`.
-Keep commits, documentation and issue descriptions in English.
-
-## License and references
-
-GPL-3.0-or-later. See [LICENSE](LICENSE) and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Television content, channel
-names and services belong to their respective owners. Code licensing does not
-grant rights to television content. This project is not affiliated with
-WorldLiveTV, Kodi, Google or the broadcasters.
-
-- [WorldLiveTV](https://github.com/WorldLiveTV/WorldLiveTV.github.io)
-- [Media3 media library service](https://developer.android.com/media/media3/session/serve-content)
-- [Background playback](https://developer.android.com/media/media3/session/background-playback)
-- [Track selection](https://developer.android.com/media/media3/exoplayer/track-selection)
-- [Media apps for Android Auto](https://developer.android.com/training/cars/media/auto)
-- [Car app testing](https://developer.android.com/training/cars/testing)
-
-## Mediaset troubleshooting
-
-Version 0.3.0 fixes a startup failure caused by reading the entire Mediaset
-homepage, which exceeds the API response limit. Only its HTML head is now read
-(up to 128 KiB), and the connection is closed before downloading the page body.
-Other API responses retain their 2 MiB limit. Regression tests cover large page
-bodies, split HTML head terminators and response limits.
-
-If Mediaset resolution fails, the app shows a safe stage code:
-M01 homepage metadata, M02 guest login, M03 playback authorization, M04 media
-selector, M05 stream/DRM metadata. Tokens and source URLs are not included.
-For player failures, report the displayed Media3 error code instead.
-
-### Mediaset compatibility fixes in 0.2.2
-
-The resolver now accepts Mediaset's `link-ott-prod.mediaset.net` selector as well
-as the legacy thePlatform hosts. The new host was being rejected for most
-channels, while Canale 5 and Italia 1 used a supported legacy host.
-
-Encrypted channels explicitly prefer Widevine while preserving the provider's
-quality and territory filters; PlayReady-only manifests are rejected before
-creating an incompatible DRM session. TGcom24 retains its unencrypted source.
-Media redirects (including the wrapper used by 20 Mediaset) are followed before
-passing the final DASH URI and explicit MIME type to Media3. Resolution stage
-M06 now covers manifest redirects and Widevine compatibility.
-
-Use **Diagnostics → Copy diagnostics** after a failure. The report contains
-app/Android/device versions, the most recent channel and error types/frames.
-Java crashes are retained locally for the next launch; on Android 11+ the report
-also includes the latest available system crash/ANR reason. Native crash traces
-are not collected. Exception messages, stream URLs and tokens are excluded.
-Nothing is sent automatically. Device playback and the reported 20 Mediaset
-process crash still require confirmation on the affected phone.
-
-## ListenTv interface — 0.3.0
-
-The app display name is **ListenTv**. The package ID remains
-`it.gianrolando.listentv` so this is an update to the same installed app.
-A dark navy interface includes an adaptive channel grid, 24 bundled channel
-logos, search, broadcaster/favorites filters, highlighted selection and a
-persistent player panel. English and Italian follow the device language.
-
-The top-right menu contains custom sources, diagnostics and audio information.
-Custom sources use a headphones placeholder and can still be removed by a long
-press. Existing favorites are retained. Channel artwork is also included in
-media metadata for notifications and Android Auto. The stream resolvers and
-playback service behavior are preserved.
-
-Actions builds the APK and captures the native interface on an Android 15
-emulator in phone and tablet configurations; previews are separate artifacts.
+Application ID: `it.gianrolando.listentv`.

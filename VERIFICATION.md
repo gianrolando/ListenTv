@@ -78,3 +78,18 @@ Stream-resolution code was not changed by this UI update. Existing regression
 tests, compilation and lint remain in Actions. A separate emulator job captures
 phone/tablet screenshots for visual review. Hardware audio/DRM playback and
 Android Auto remain dependent on device validation.
+
+## Stable release — 1.0.0
+
+The owner confirmed that the app works. Streaming resolvers are unchanged.
+Mediaset logos now use official MFE 560x560 originals, with transparent padding
+cropped. Media artwork is composed at 512x512 rather than 256x256.
+The diagnostics menu is removed; About includes offline copyright, license and
+component notices. Release builds disable debugging and keep code shrinking
+off to avoid introducing playback regressions.
+
+CI runs release unit tests, release APK compilation and lint, plus emulator
+phone/tablet screenshots from a separate UI test build. The unsigned release
+is signed locally using a dedicated private PKCS12 key kept outside GitHub.
+The final APK must pass apksigner verification after signing.
+Repository visibility remains private; no public publication is authorized.
