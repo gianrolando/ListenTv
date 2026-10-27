@@ -191,8 +191,29 @@ Corrections:
 Robolectric regression tests exercise catalog cache invalidation across instances,
 favorites/custom-source deletion, immutable snapshots and damaged persisted JSON.
 Additional JVM cases cover partial guide merges, locale independence and XML nesting/byte bounds.
-Build, lint and emulator results are recorded below after the verification run completes.
+Build, lint and emulator results are recorded below.
 
 These changes remove repeated work by construction; no numerical speedup or battery-life
 claim is made without a physical-device benchmark. Android Auto hardware and broadcaster
 availability remain subject to the device checks listed above.
+
+### Recorded 1.3.1 verification
+
+- Application source commit: `66971ab0e2ada96c690507b00c4f60c696f83412`.
+- Private Actions run: https://github.com/gianrolando/ListenTv/actions/runs/40472745725.
+- All 33 regression tests passed, including four Robolectric catalog cases.
+- Release/debug compilation and pinned Java-format verification passed.
+- Android lint: 0 errors, 8 warnings. These concern target/dependency updates,
+  the intentional API 23 network-security fallback, the exported media browsing
+  service required by external controllers, and Android 12 backup configuration.
+  No warnings were hidden or disabled as part of this review. A Media3/target-SDK
+  migration needs its own playback/device validation and is not bundled here.
+- API 35 phone and tablet emulator checks passed with real guide data (4077 entries),
+  current programme labels and the unchanged 48-channel catalog.
+- Phone/tablet screenshots were inspected; the captured runtime contains no fatal exception.
+- Signed APK: version 1.3.1 (10), debugging disabled; SHA-256:
+  `a39561f912dbb3e85ab5a89a9e32daf17fe5e62c34458ce503090333dd00df51`.
+- Stable RSA-3072 certificate unchanged; v1/v2/v3 signatures verified.
+- Signed manifest version, removed diagnostic classes and bundled legal assets verified.
+- GitHub repository visibility verified private; no release published.
+- A subsequent documentation-only commit does not alter the tested application source.
