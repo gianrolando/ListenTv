@@ -9,24 +9,44 @@ import org.json.*;
 
 /** Persistent IDs are exposed to Android Auto; URLs are resolved only at play time. */
 public final class Catalog {
-    public record Channel(String id, String name, String provider, String key) {
-        /** UI grouping is independent from the broadcaster used for playback. */
-        public String group() { return id.equals("tv8") ? "discovery" : provider; }
-        public MediaItem item(Context context) {
-            MediaMetadata.Builder metadata=new MediaMetadata.Builder().setTitle(name)
-                .setArtist(context.getString(R.string.live_audio)).setIsBrowsable(false).setIsPlayable(true);
-            EpgGuide guide=EpgGuide.get(context);EpgProgramme programme=guide.current(id);
-            if(programme!=null)metadata.setArtist(programme.title()).setSubtitle(programme.title()).setDescription(guide.range(programme));
-            byte[] artwork=ChannelArtwork.data(context,id);
-            if(artwork!=null) metadata.setArtworkData(artwork,MediaMetadata.PICTURE_TYPE_FRONT_COVER);
-            return new MediaItem.Builder().setMediaId(id).setMediaMetadata(metadata.build()).build();
-        }
+  public record Channel(String id, String name, String provider, String key) {
+    /** UI grouping is independent from the broadcaster used for playback. */
+    public String group() {
+      return id.equals("tv8") ? "discovery" : provider;
     }
-    private final SharedPreferences prefs;
-    private final Context context;
-    public Catalog(Context context) { this.context = context.getApplicationContext(); prefs = context.getSharedPreferences("catalog", Context.MODE_PRIVATE); }
-    public List<Channel> all() {
-        List<Channel> list = new ArrayList<>(List.of(
+
+    public MediaItem item(Context context) {
+      MediaMetadata.Builder metadata =
+          new MediaMetadata.Builder()
+              .setTitle(name)
+              .setArtist(context.getString(R.string.live_audio))
+              .setIsBrowsable(false)
+              .setIsPlayable(true);
+      EpgGuide guide = EpgGuide.get(context);
+      EpgProgramme programme = guide.current(id);
+      if (programme != null)
+        metadata
+            .setArtist(programme.title())
+            .setSubtitle(programme.title())
+            .setDescription(guide.range(programme));
+      byte[] artwork = ChannelArtwork.data(context, id);
+      if (artwork != null) metadata.setArtworkData(artwork, MediaMetadata.PICTURE_TYPE_FRONT_COVER);
+      return new MediaItem.Builder().setMediaId(id).setMediaMetadata(metadata.build()).build();
+    }
+  }
+
+  private final SharedPreferences prefs;
+  private final Context context;
+  private final List<Channel> builtIn;
+  private String customJson;
+  private List<Channel> snapshot;
+  private Map<String, Channel> index = Map.of();
+
+  public Catalog(Context context) {
+    this.context = context.getApplicationContext();
+    prefs = this.context.getSharedPreferences("catalog", Context.MODE_PRIVATE);
+    builtIn =
+        List.of(
             new Channel("rai1", "Rai 1", "rai", "Rai 1"),
             new Channel("rai2", "Rai 2", "rai", "Rai 2"),
             new Channel("rai3", "Rai 3", "rai", "Rai 3"),
@@ -74,38 +94,68 @@ public final class Catalog {
             new Channel("la7cinema", "La7 Cinema", "la7", "cinema"),
             new Channel("sanmarinortv", "San Marino RTV", "sanmarino", "0"),
             new Channel("sanmarinortvsport", "San Marino RTV Sport", "sanmarino", "1"),
-            new Channel("tv2000", "TV2000", "tv2000", "4Y3ZMmvcvo")
-        ));
-        try {
-            JSONArray a = new JSONArray(prefs.getString("custom", "[]"));
-            for (int i=0; i<a.length(); i++) {
-                JSONObject o=a.getJSONObject(i);
-                list.add(new Channel(o.getString("id"),o.getString("name"),"direct",o.getString("url")));
-            }
-        } catch(JSONException ignored) { }
-        return list;
+            new Channel("tv2000", "TV2000", "tv2000", "4Y3ZMmvcvo"));
+  }
+
+  /** Rebuild only when custom sources change; favorites do not invalidate channel data. */
+  public synchronized List<Channel> all() {
+    String stored = prefs.getString("custom", "[]");
+    if (snapshot != null && stored.equals(customJson)) return snapshot;
+    List<Channel> list = new ArrayList<>(builtIn);
+    try {
+      JSONArray a = new JSONArray(stored);
+      for (int i = 0; i < a.length(); i++) {
+        JSONObject o = a.getJSONObject(i);
+        list.add(new Channel(o.getString("id"), o.getString("name"), "direct", o.getString("url")));
+      }
+    } catch (JSONException ignored) {
     }
-    public Channel find(String id) { return all().stream().filter(c->c.id().equals(id)).findFirst().orElse(null); }
-    public boolean favorite(String id) { return prefs.getStringSet("favorites", Set.of()).contains(id); }
-    public void toggle(String id) {
-        Set<String> s=new HashSet<>(prefs.getStringSet("favorites", Set.of()));
-        if (!s.remove(id)) s.add(id);
-        prefs.edit().putStringSet("favorites",s).apply();
+    snapshot = List.copyOf(list);
+    customJson = stored;
+    Map<String, Channel> lookup = new HashMap<>();
+    for (Channel channel : snapshot) lookup.put(channel.id(), channel);
+    index = Map.copyOf(lookup);
+    return snapshot;
+  }
+
+  public synchronized Channel find(String id) {
+    all();
+    return index.get(id);
+  }
+
+  public boolean favorite(String id) {
+    return prefs.getStringSet("favorites", Set.of()).contains(id);
+  }
+
+  public void toggle(String id) {
+    Set<String> s = new HashSet<>(prefs.getStringSet("favorites", Set.of()));
+    if (!s.remove(id)) s.add(id);
+    prefs.edit().putStringSet("favorites", s).apply();
+  }
+
+  public void add(String name, String url) throws Exception {
+    java.net.URI uri = new java.net.URI(url);
+    if (!"https".equalsIgnoreCase(uri.getScheme())
+        || uri.getHost() == null
+        || uri.getUserInfo() != null)
+      throw new IllegalArgumentException(context.getString(R.string.invalid_url));
+    if (name.isBlank())
+      throw new IllegalArgumentException(context.getString(R.string.missing_name));
+    JSONArray a = new JSONArray(prefs.getString("custom", "[]"));
+    a.put(
+        new JSONObject().put("id", UUID.randomUUID().toString()).put("name", name).put("url", url));
+    prefs.edit().putString("custom", a.toString()).apply();
+  }
+
+  public void remove(String id) {
+    try {
+      JSONArray old = new JSONArray(prefs.getString("custom", "[]")), out = new JSONArray();
+      for (int i = 0; i < old.length(); i++)
+        if (!old.getJSONObject(i).getString("id").equals(id)) out.put(old.get(i));
+      Set<String> favorites = new HashSet<>(prefs.getStringSet("favorites", Set.of()));
+      favorites.remove(id);
+      prefs.edit().putString("custom", out.toString()).putStringSet("favorites", favorites).apply();
+    } catch (JSONException ignored) {
     }
-    public void add(String name, String url) throws Exception {
-        java.net.URI uri=new java.net.URI(url);
-        if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost()==null || uri.getUserInfo()!=null)
-            throw new IllegalArgumentException(context.getString(R.string.invalid_url));
-        if (name.isBlank()) throw new IllegalArgumentException(context.getString(R.string.missing_name));
-        JSONArray a=new JSONArray(prefs.getString("custom","[]"));
-        a.put(new JSONObject().put("id",UUID.randomUUID().toString()).put("name",name).put("url",url));
-        prefs.edit().putString("custom",a.toString()).apply();
-    }
-    public void remove(String id) {
-        try {
-            JSONArray old=new JSONArray(prefs.getString("custom","[]")), out=new JSONArray();
-            for(int i=0;i<old.length();i++) if(!old.getJSONObject(i).getString("id").equals(id)) out.put(old.get(i));
-            prefs.edit().putString("custom",out.toString()).apply();
-        } catch(JSONException ignored) { }
-    }
+  }
 }

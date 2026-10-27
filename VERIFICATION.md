@@ -167,3 +167,32 @@ Repository visibility remains private; no public publication is authorized.
 - Guide requests use a separate bounded transport with an explicit redirect allowlist. HTTP is limited to the public guide mirror on Android 7+; no playback/DRM tokens enter guide requests.
 - Media metadata updates replace metadata on the existing resolved item without changing its URI/DRM configuration.
 - Physical Android Auto rendering and hardware playback remain device checks.
+
+## Code review — 1.3.1 (2026-10-27)
+
+Reviewed all production Java classes, manifest/resources, Gradle configuration,
+unit tests, signing script and CI. Scope covers lifecycle, catalogue persistence,
+playback/DRM resolution, network bounds, XML parsing, guide caching, UI and media library.
+
+Corrections:
+- Catalog snapshots are immutable and invalidated by the persisted custom-source value,
+  so independent activity/service instances observe changes without rebuilding all channels.
+- Favorite removal accompanies custom-source deletion. Catalog notifications ignore playback errors.
+- Artwork encoding for library browsing runs outside the session thread and stream-resolution pool;
+  pagination happens before artwork generation.
+- UI updates reuse unchanged logos and avoid allocating selection backgrounds repeatedly.
+- Cache entries are validated before publication; partial Rai daily refreshes retain usable cached slots.
+- XML parsing ignores unknown-channel timestamps and rejects nested titles/schedule entries.
+- Date parsers are strict, locale-independent and reused; test fixtures cover cache overflow and limits.
+- The unused diagnostic report/crash subsystem and its synchronous disk writes were removed.
+- Discovery can continue to an unprotected variant when another variant has unsupported DRM.
+- All Java sources/tests use google-java-format 1.24.0; CI verifies formatting with a pinned checksum.
+
+Robolectric regression tests exercise catalog cache invalidation across instances,
+favorites/custom-source deletion, immutable snapshots and damaged persisted JSON.
+Additional JVM cases cover partial guide merges, locale independence and XML nesting/byte bounds.
+Build, lint and emulator results are recorded below after the verification run completes.
+
+These changes remove repeated work by construction; no numerical speedup or battery-life
+claim is made without a physical-device benchmark. Android Auto hardware and broadcaster
+availability remain subject to the device checks listed above.

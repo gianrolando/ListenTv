@@ -6,12 +6,13 @@ android {
         applicationId = "it.gianrolando.listentv"
         minSdk = 23
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.3.0"
+        versionCode = 10
+        versionName = "1.3.1"
     }
     buildTypes {
         getByName("release") { isDebuggable = false; isMinifyEnabled = false }
     }
+    testOptions { unitTests.isIncludeAndroidResources = true }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
@@ -20,6 +21,7 @@ android {
 }
 dependencies {
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.14.1")
     testImplementation("net.sf.kxml:kxml2:2.3.0")
     implementation("org.tukaani:xz:1.10")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")

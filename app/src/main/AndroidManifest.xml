@@ -1,12 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
-    <!-- Voice search is not implemented in this prototype; browse and select channels. -->
-    <application android:name=".ListenTvApplication" tools:ignore="MissingIntentFilterForMediaSearch" android:label="@string/app_name" android:icon="@drawable/ic_app"
+    <!-- Voice search is not implemented ; browse and select channels. -->
+    <application tools:ignore="MissingIntentFilterForMediaSearch" android:label="@string/app_name" android:icon="@drawable/ic_app"
         android:allowBackup="false" android:usesCleartextTraffic="@bool/guide_legacy_cleartext" android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize">

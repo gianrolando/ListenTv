@@ -1,13 +1,16 @@
-# ListenTv 1.3.0 — on-air programme guide
+# ListenTv 1.3.1 — code quality and reliability
 
-- Show current programme titles, transmission times and progress on channel cards.
-- Search by the programme currently on air as well as by channel/broadcaster.
-- Include current programme information in Android Auto/media metadata.
-- Load the WorldLiveTV XMLTV guide in the background with a bounded private cache.
-- Use official RaiPlay schedules for Italiana and Rai 4K where the shared guide lacks data.
-- Keep playback available when the guide is unavailable; never label expired entries as on air.
-- Retain the 48-channel catalog, favorites and existing release signing key.
+- Cache immutable channel lists and ID lookups; refresh them when custom sources change.
+- Avoid reloading unchanged player artwork and repainting unchanged channel selections.
+- Encode Android Auto artwork on a separate worker, only for the requested page.
+- Limit Android Auto catalog notifications to actual catalog/favorite changes and programme transitions.
+- Retain valid cached Rai programmes during partial schedule failures, including failed daily requests.
+- Validate cached programme titles, duration and retention window before publication.
+- Reuse strict XMLTV timestamp parsers and skip timestamps for unknown channels.
+- Ignore nested XML descriptions masquerading as programme titles or schedule entries.
+- Try other Discovery stream variants when one variant uses unsupported protection.
+- Remove the unused diagnostics subsystem, synchronous diagnostic writes, unused icons and permission.
+- Remove stale favorites when deleting custom sources; preserve the existing 48-channel catalog.
+- Apply consistent Java formatting throughout production code and regression tests.
 
-Schedules depend on source coverage and may not reflect last-minute live changes.
-Missing schedules show a clear unavailable label; no guide data is bundled.
-The GitHub repository remains private.
+No playback credentials, signing keys or guide listings are bundled. The repository remains private.
