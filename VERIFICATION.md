@@ -269,3 +269,20 @@ pages directly and sends the new La7Play Origin/Referer for DRM requests.
 - Complex vector artwork is rasterized at build preparation time, so runtime artwork rendering stays light.
 - Regression coverage includes provider source parsing, signed RTV path/query preservation, HTTPS validation,
   protected Brightcove source rejection, catalog grouping and 512-pixel artwork output.
+
+### Recorded 1.4.0 verification
+
+- Application source commit: `fe1d47039df28e8d5976c2e719f4b551c9e1c4d0`.
+- Private Actions run: https://github.com/gianrolando/ListenTv/actions/runs/40686397492.
+- All 45 regression tests passed; release/debug compilation and Java formatting passed.
+- Release lint: 0 errors, 8 pre-existing warnings; vector complexity warnings removed by preparing PNG artwork.
+- Catalog validation: 51 unique built-in IDs; all three new broadcasters match the Other filter;
+  TV8 remains immediately before NOVE within Discovery.
+- Official pages/playback APIs, master/variant playlists and media segments checked using the
+  application User-Agent. All fresh playlists returned HTTP 200 and sample segment requests HTTP 206.
+- An older Telecapodistria link correctly expired; a fresh API-issued URL passed both playlist
+  and segment checks. The app resolves it for every play request.
+- Signed APK 1.4.0 (13), SHA-256: `1624f48d672ce9bc2c100f56c645755eff4e4c61753c33e4a2e4a0d00aad7585`.
+- Same stable certificate and v1/v2/v3 signatures verified; signed version, channel names and legal assets checked.
+- Device playback and Android Auto hardware remain user-device checks. No public release published.
+- Documentation-only commits do not alter the tested application source.
