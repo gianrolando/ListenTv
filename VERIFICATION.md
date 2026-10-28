@@ -234,3 +234,7 @@ remain enforced. Widevine license/decode remains a physical-device check.
 New parser tests cover escaped/split flight chunks, channel identity, signed query strings,
 HTTPS/token/license host validation, unsupported formats, missing data and header injection.
 No access tokens or complete official pages are committed.
+
+The legacy La7 URLs redirect to `https://www.la7play.it/dirette/la7` and
+`https://www.la7play.it/dirette/la7-cinema`. The resolver uses those current
+pages directly and sends the new La7Play Origin/Referer for DRM requests.

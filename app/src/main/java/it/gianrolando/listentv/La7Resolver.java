@@ -16,8 +16,8 @@ final class La7Resolver {
   StreamResolver.Source resolve(String key) throws Exception {
     String page =
         switch (key) {
-          case "" -> "https://www.la7.it/dirette-tv";
-          case "cinema" -> "https://www.la7.it/live-la7cinema";
+          case "" -> "https://www.la7play.it/dirette/la7";
+          case "cinema" -> "https://www.la7play.it/dirette/la7-cinema";
           default -> throw new java.io.IOException("Unknown La7 channel.");
         };
     La7Sources.Configuration config =
@@ -44,7 +44,7 @@ final class La7Resolver {
     return new StreamResolver.Source(
         address,
         config.license(),
-        Map.of("preAuthorization", token, "Origin", "https://www.la7.it", "Referer", page),
+        Map.of("preAuthorization", token, "Origin", "https://www.la7play.it", "Referer", page),
         MimeTypes.APPLICATION_MPD);
   }
 }
