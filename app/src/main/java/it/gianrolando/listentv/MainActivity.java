@@ -726,7 +726,7 @@ public final class MainActivity extends Activity {
   }
 
   private void showAbout() {
-    String version = "1.3.1";
+    String version = "1.3.3";
     try {
       version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
     } catch (Exception ignored) {

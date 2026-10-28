@@ -217,3 +217,20 @@ availability remain subject to the device checks listed above.
 - Signed manifest version, removed diagnostic classes and bundled legal assets verified.
 - GitHub repository visibility verified private; no release published.
 - A subsequent documentation-only commit does not alter the tested application source.
+
+## La7 live player migration — 1.3.3 (2026-10-28)
+
+The official La7 and La7 Cinema pages now render Next.js flight data rather than the
+legacy `dash` and `preTokenUrl` JavaScript variables. The previous resolver fails before
+playback. Current player settings are under `configurazionePlayer` and supply separate
+DASH/HLS URLs, the token endpoint and DRM content IDs (La7: 1; Cinema: 2).
+
+Inspected the official player JavaScript and reproduced its public token requests:
+`id`, `contentType=LIVE`, `v` timestamp. Both token endpoints and primary DASH manifests
+returned HTTP 200; both manifests contain audio and advertise Widevine. No DRM licenses
+were extracted or protections removed. Normal TLS checks and broadcaster restrictions
+remain enforced. Widevine license/decode remains a physical-device check.
+
+New parser tests cover escaped/split flight chunks, channel identity, signed query strings,
+HTTPS/token/license host validation, unsupported formats, missing data and header injection.
+No access tokens or complete official pages are committed.

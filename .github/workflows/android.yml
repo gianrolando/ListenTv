@@ -35,12 +35,12 @@ jobs:
       - name: Prepare unsigned release for private local signing
         run: |
           mkdir -p release-build
-          cp app/build/outputs/apk/release/app-release-unsigned.apk release-build/ListenTv-1.3.2-unsigned.apk
+          cp app/build/outputs/apk/release/app-release-unsigned.apk release-build/ListenTv-1.3.3-unsigned.apk
           cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" release-build/apksigner.jar
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging release-build/ListenTv-1.3.2-unsigned.apk > release-build/build-info.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging release-build/ListenTv-1.3.3-unsigned.apk > release-build/build-info.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: ListenTv-1.3.2-unsigned-build
+          name: ListenTv-1.3.3-unsigned-build
           path: release-build/*
           if-no-files-found: error
           retention-days: 30

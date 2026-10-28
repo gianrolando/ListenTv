@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.3.2 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.3.3 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -23,7 +23,7 @@ MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
 All channel logos are bundled, so displaying them does not require a network
 request. Logos and television content belong to their respective owners.
 
-## On-air programme guide — 1.3.2
+## On-air programme guide — 1.3.3
 
 Channel cards show the current programme, start/end times and a progress bar.
 Search also matches current programme titles. Media metadata carries the
@@ -87,7 +87,7 @@ private release signing key is used.
 
 ## Install the stable app
 
-Install the signed `ListenTv-1.3.2.apk` from the private release package supplied
+Install the signed `ListenTv-1.3.3.apk` from the private release package supplied
 by the project owner. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 
