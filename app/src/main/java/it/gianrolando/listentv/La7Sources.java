@@ -84,8 +84,10 @@ final class La7Sources {
       for (String name : new String[] {"preAuthToken", "token", "auth"}) {
         Object value = response.opt(name);
         if (!(value instanceof String token) || token.isBlank()) continue;
-        if (token.length() > 16384 || token.chars().anyMatch(Character::isISOControl))
-          throw new IOException("Invalid La7 authorization token.");
+        if (token.length() > 16384) throw new IOException("Invalid La7 authorization token.");
+        for (int i = 0; i < token.length(); i++)
+          if (Character.isISOControl(token.charAt(i)))
+            throw new IOException("Invalid La7 authorization token.");
         return token;
       }
     } catch (JSONException invalid) {
