@@ -265,7 +265,7 @@ pages directly and sends the new La7Play Origin/Referer for DRM requests.
   and verified against current official pages. No signed URLs or policy values bundled.
 - New entries use separate broadcaster IDs, so they appear under Other and cannot be deleted as custom URLs.
 - Sportitalia artwork is the 720-pixel current logo from Commons; Sole's official logo is 1382 pixels wide.
-  Telecapodistria uses the official site's SVG paths converted losslessly to an Android vector resource.
-- Android Auto artwork rendering now supports both bitmap and vector resources.
+  Telecapodistria uses the official site's SVG rendered to a transparent 1600-pixel PNG.
+- Complex vector artwork is rasterized at build preparation time, so runtime artwork rendering stays light.
 - Regression coverage includes provider source parsing, signed RTV path/query preservation, HTTPS validation,
   protected Brightcove source rejection, catalog grouping and 512-pixel artwork output.

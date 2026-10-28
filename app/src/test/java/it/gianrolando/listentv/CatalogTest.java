@@ -75,7 +75,7 @@ public class CatalogTest {
   }
 
   @Test
-  public void bitmapAndVectorChannelArtRemainValidForAndroidAuto() {
+  public void channelArtworkRemainsValidForAndroidAuto() {
     for (String id : List.of("rai1", "sportitalia", "ilsole24oretv", "telecapodistria")) {
       byte[] bytes = ChannelArtwork.data(context, id);
       assertNotNull(bytes);

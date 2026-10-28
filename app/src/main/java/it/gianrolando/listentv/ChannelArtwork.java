@@ -116,26 +116,22 @@ final class ChannelArtwork {
     return CACHE.computeIfAbsent(
         id,
         key -> {
-          android.graphics.drawable.Drawable source = context.getDrawable(res);
+          Bitmap source = BitmapFactory.decodeResource(context.getResources(), res);
           if (source == null) return null;
-          source = source.mutate();
-          if (source instanceof android.graphics.drawable.BitmapDrawable bitmap)
-            bitmap.setFilterBitmap(true);
-          int sourceWidth = Math.max(1, source.getIntrinsicWidth()),
-              sourceHeight = Math.max(1, source.getIntrinsicHeight());
           Bitmap output = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
           Canvas canvas = new Canvas(output);
           canvas.drawColor(background(id));
-          float scale = Math.min(448f / sourceWidth, 384f / sourceHeight);
-          float width = sourceWidth * scale, height = sourceHeight * scale;
-          source.setBounds(
-              Math.round((512 - width) / 2),
-              Math.round((512 - height) / 2),
-              Math.round((512 + width) / 2),
-              Math.round((512 + height) / 2));
-          source.draw(canvas);
+          float scale = Math.min(448f / source.getWidth(), 384f / source.getHeight());
+          float width = source.getWidth() * scale, height = source.getHeight() * scale;
+          canvas.drawBitmap(
+              source,
+              null,
+              new RectF(
+                  (512 - width) / 2, (512 - height) / 2, (512 + width) / 2, (512 + height) / 2),
+              new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
           ByteArrayOutputStream bytes = new ByteArrayOutputStream();
           output.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+          source.recycle();
           output.recycle();
           return bytes.toByteArray();
         });
