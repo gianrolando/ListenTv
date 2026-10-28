@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.3.3 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.4.0 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -13,7 +13,7 @@ Copyright © 2026 Gianrolando Scaringi.
 - Android Auto media catalog with persistent favorites and 512-pixel artwork.
 - 14 Rai television channels (Rai Radio 2 visual radio excluded), 15 free-to-air Mediaset
   channels, 11 Warner Bros. Discovery channels, Sky TG24, Cielo, TV8, La7,
-  La7 Cinema, San Marino RTV, San Marino RTV Sport and TV2000.
+  La7 Cinema, San Marino RTV, San Marino RTV Sport, TV2000, Sportitalia, Il Sole 24 Ore TV and Telecapodistria.
 - Custom direct HTTPS HLS, DASH and audio sources.
 - English and Italian interface, selected from the device language.
 - In-app copyright, GPL license text and third-party credits, available offline.
@@ -23,7 +23,7 @@ MFE/Mediaset corporate gallery rather than the old 100-pixel thumbnails.
 All channel logos are bundled, so displaying them does not require a network
 request. Logos and television content belong to their respective owners.
 
-## On-air programme guide — 1.3.3
+## On-air programme guide — 1.4.0
 
 Channel cards show the current programme, start/end times and a progress bar.
 Search also matches current programme titles. Media metadata carries the
@@ -87,7 +87,7 @@ private release signing key is used.
 
 ## Install the stable app
 
-Install the signed `ListenTv-1.3.3.apk` from the private release package supplied
+Install the signed `ListenTv-1.4.0.apk` from the private release package supplied
 by the project owner. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 

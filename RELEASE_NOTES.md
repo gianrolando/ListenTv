@@ -1,11 +1,11 @@
-# ListenTv 1.3.3 — La7 live player migration
+# ListenTv 1.4.0 — three additional TV channels
 
-- Restore La7 and La7 Cinema resolution after the official site moved to a Next.js player.
-- Read current channel-specific DASH, backup, token and Widevine settings from public page data.
-- Request fresh guest authorization with the correct content ID and LIVE content type.
-- Restrict token/license endpoints to the verified broadcaster hosts; retain normal TLS validation.
-- Use the official backup manifest if the primary manifest cannot be retrieved.
-- Preserve the existing 48-channel catalog and TV8 immediately before NOVE in Discovery.
+- Add Sportitalia, Il Sole 24 Ore TV and Telecapodistria to the Other group (51 channels).
+- Resolve current Sportitalia and official Sole/Brightcove sources at playback time.
+- Obtain fresh Telecapodistria URLs from RTV Slovenija without persisting signed stream links.
+- Bundle channel artwork, including the official vector Telecapodistria wordmark.
+- Render bitmap and vector artwork for Android Auto while preserving the 512-pixel output.
+- Preserve TV8 before NOVE in Discovery, existing favorites and the stable signing key.
 
-The source manifests and token responses were checked for both channels. Widevine playback
-still depends on the device, broadcaster entitlement and geographic/content restrictions.
+Guide data appears where the configured guide covers a channel; unavailable listings are not invented.
+Broadcaster geographic and programme restrictions still apply.

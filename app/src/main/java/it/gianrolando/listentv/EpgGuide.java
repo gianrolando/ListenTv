@@ -188,7 +188,7 @@ final class EpgGuide {
       connection.setInstanceFollowRedirects(false);
       connection.setConnectTimeout(6000);
       connection.setReadTimeout(10000);
-      connection.setRequestProperty("User-Agent", "WLTV ListenTv/1.3.3");
+      connection.setRequestProperty("User-Agent", "WLTV ListenTv/1.4.0");
       try {
         int status = connection.getResponseCode();
         android.util.Log.i("ListenTvGuide", "Guide HTTP " + status + " from " + host);

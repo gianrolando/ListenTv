@@ -111,3 +111,13 @@ CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
 LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+## Additional broadcasters — 1.4.0
+
+Sportitalia, Il Sole 24 Ore TV and Telecapodistria sources are resolved from their public official
+players/APIs. Provider procedures adapted from WorldLiveTV remain GPL-3.0-or-later.
+The Brightcove and RTV client identifiers are public player configuration, not user credentials.
+Sportitalia artwork is sourced from Wikimedia Commons (File:Sportitalia_2019_Logo.png);
+Sole artwork comes from ilsole24ore.tv and Telecapodistria vector paths from its official RTV theme.
+Broadcaster names, marks and content remain the property of their respective owners.
+Exact artwork source URLs are recorded in CHANNEL_LOGOS.json.

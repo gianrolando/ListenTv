@@ -20,7 +20,7 @@ public final class StreamResolver {
     this.context = context.getApplicationContext();
   }
 
-  static final String USER_AGENT = "listentv/1.3.3 (Android; audio player)";
+  static final String USER_AGENT = "listentv/1.4.0 (Android; audio player)";
 
   static final class HttpStatusException extends IOException {
     HttpStatusException(int status) {
@@ -48,6 +48,8 @@ public final class StreamResolver {
                       .getString("streaming_url"));
           case "tv2000" -> tv2000(channel.key());
           case "la7" -> new La7Resolver(this).resolve(channel.key());
+          case "sportitalia", "sole24", "rtvslo" ->
+              new OtherChannelResolver(this).resolve(channel.provider());
           case "sanmarino" -> sanMarino(channel.key());
           default -> plain(channel.key());
         };

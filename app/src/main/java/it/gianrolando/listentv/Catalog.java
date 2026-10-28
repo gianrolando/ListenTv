@@ -94,7 +94,10 @@ public final class Catalog {
             new Channel("la7cinema", "La7 Cinema", "la7", "cinema"),
             new Channel("sanmarinortv", "San Marino RTV", "sanmarino", "0"),
             new Channel("sanmarinortvsport", "San Marino RTV Sport", "sanmarino", "1"),
-            new Channel("tv2000", "TV2000", "tv2000", "4Y3ZMmvcvo"));
+            new Channel("tv2000", "TV2000", "tv2000", "4Y3ZMmvcvo"),
+            new Channel("sportitalia", "Sportitalia", "sportitalia", "sihd"),
+            new Channel("ilsole24oretv", "Il Sole 24 Ore TV", "sole24", "tv"),
+            new Channel("telecapodistria", "Telecapodistria", "rtvslo", "tv.kp1"));
   }
 
   /** Rebuild only when custom sources change; favorites do not invalidate channel data. */

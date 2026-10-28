@@ -34,6 +34,9 @@ final class ChannelArtwork {
       case "tv8" -> R.drawable.logo_tv8;
       case "la7" -> R.drawable.logo_la7;
       case "tv2000" -> R.drawable.logo_tv2000;
+      case "sportitalia" -> R.drawable.logo_sportitalia;
+      case "ilsole24oretv" -> R.drawable.logo_ilsole24oretv;
+      case "telecapodistria" -> R.drawable.logo_telecapodistria;
       case "raisport" -> R.drawable.logo_raisport;
       case "rai4k" -> R.drawable.logo_rai4k;
       case "rai4" -> R.drawable.logo_rai4;
@@ -79,7 +82,10 @@ final class ChannelArtwork {
               "raigulp" ->
           Color.rgb(243, 246, 251);
       case "italiana" -> Color.rgb(5, 50, 93);
-      case "sanmarinortvsport",
+      case "telecapodistria" -> Color.rgb(46, 15, 173);
+      case "sportitalia",
+              "ilsole24oretv",
+              "sanmarinortvsport",
               "skytg24",
               "cielo",
               "tv8",
@@ -110,22 +116,26 @@ final class ChannelArtwork {
     return CACHE.computeIfAbsent(
         id,
         key -> {
-          Bitmap source = BitmapFactory.decodeResource(context.getResources(), res);
+          android.graphics.drawable.Drawable source = context.getDrawable(res);
           if (source == null) return null;
+          source = source.mutate();
+          if (source instanceof android.graphics.drawable.BitmapDrawable bitmap)
+            bitmap.setFilterBitmap(true);
+          int sourceWidth = Math.max(1, source.getIntrinsicWidth()),
+              sourceHeight = Math.max(1, source.getIntrinsicHeight());
           Bitmap output = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
           Canvas canvas = new Canvas(output);
           canvas.drawColor(background(id));
-          float scale = Math.min(448f / source.getWidth(), 384f / source.getHeight());
-          float width = source.getWidth() * scale, height = source.getHeight() * scale;
-          canvas.drawBitmap(
-              source,
-              null,
-              new RectF(
-                  (512 - width) / 2, (512 - height) / 2, (512 + width) / 2, (512 + height) / 2),
-              new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+          float scale = Math.min(448f / sourceWidth, 384f / sourceHeight);
+          float width = sourceWidth * scale, height = sourceHeight * scale;
+          source.setBounds(
+              Math.round((512 - width) / 2),
+              Math.round((512 - height) / 2),
+              Math.round((512 + width) / 2),
+              Math.round((512 + height) / 2));
+          source.draw(canvas);
           ByteArrayOutputStream bytes = new ByteArrayOutputStream();
           output.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-          source.recycle();
           output.recycle();
           return bytes.toByteArray();
         });

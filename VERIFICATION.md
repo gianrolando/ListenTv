@@ -252,3 +252,20 @@ pages directly and sends the new La7Play Origin/Referer for DRM requests.
 - Signed manifest version, new La7Play resolver strings and legal assets verified.
 - Actual Widevine licensing/decoding on the user's phone remains to be confirmed.
 - Documentation-only commits do not change the tested application source.
+
+## Additional television channels — 1.4.0 (2026-10-28)
+
+- Sportitalia: official site links to sportitalialive.it/sihd; fresh STREAM_URL is HLS with AAC audio.
+- Sole TV: follow the official ilsole24ore.tv link s24ore.it/flussotv to its embed_by_id player,
+  obtain the public Brightcove policy from the selected player and request current playback sources.
+- Telecapodistria: RTV Slovenija getLiveStream/tv.kp1 returns a signed HLS URL; preserve its
+  complete streamer prefix and expiring query on each playback request.
+- All three master playlists returned HTTP 200 and advertised AAC audio at inspection.
+- Sportitalia source procedure, Sole Brightcove flow and RTV channel API adapted from WorldLiveTV
+  and verified against current official pages. No signed URLs or policy values bundled.
+- New entries use separate broadcaster IDs, so they appear under Other and cannot be deleted as custom URLs.
+- Sportitalia artwork is the 720-pixel current logo from Commons; Sole's official logo is 1382 pixels wide.
+  Telecapodistria uses the official site's SVG paths converted losslessly to an Android vector resource.
+- Android Auto artwork rendering now supports both bitmap and vector resources.
+- Regression coverage includes provider source parsing, signed RTV path/query preservation, HTTPS validation,
+  protected Brightcove source rejection, catalog grouping and 512-pixel artwork output.

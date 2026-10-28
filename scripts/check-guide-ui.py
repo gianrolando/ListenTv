@@ -18,7 +18,7 @@ while time.monotonic() < deadline:
         root = ET.fromstring(adb("shell", "cat", "/sdcard/guide-check.xml"))
         labels = [node.get("text", "") for node in root.iter("node")]
         programmes = [label for label in labels if label.startswith("Now ·")]
-        if "48 channels" in labels and programmes:
+        if "51 channels" in labels and programmes:
             print("GUIDE_UI_OK", programmes[:4], flush=True)
             sys.exit(0)
         if any("isn't responding" in label for label in labels):

@@ -335,6 +335,9 @@ public final class MainActivity extends Activity {
       case "la7" -> "La7";
       case "sanmarino" -> "San Marino RTV";
       case "tv2000" -> "TV2000";
+      case "sportitalia" -> "Sportitalia";
+      case "sole24" -> "Il Sole 24 Ore";
+      case "rtvslo" -> "RTV Slovenija";
       default -> getString(R.string.custom_source);
     };
   }
@@ -726,7 +729,7 @@ public final class MainActivity extends Activity {
   }
 
   private void showAbout() {
-    String version = "1.3.3";
+    String version = "1.4.0";
     try {
       version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
     } catch (Exception ignored) {

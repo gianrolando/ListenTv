@@ -46,5 +46,8 @@
   "k2": "https://upload.wikimedia.org/wikipedia/commons/b/b4/K2_new_logo.svg",
   "la7cinema": "https://www.la7.it/sites/default/themes/la7/newcss/assets/img/la7cinema_logo.svg",
   "sanmarinortv": "https://www.sanmarinortv.sm/assets/frontend/img/logo-share.jpg",
-  "sanmarinortvsport": "https://www.sanmarinortv.sm/assets/frontend/img/footer-logo-sport-bn.png"
+  "sanmarinortvsport": "https://www.sanmarinortv.sm/assets/frontend/img/footer-logo-sport-bn.png",
+  "sportitalia": "https://commons.wikimedia.org/wiki/File:Sportitalia_2019_Logo.png",
+  "ilsole24oretv": "https://www.ilsole24ore.tv/assets/img/logo-radio24TV.png",
+  "telecapodistria": "https://img.rtvslo.si/_static/r2610016/novi/bootstrap/dist/css/rtvslo-theme-tvcapodistria.min.css"
 }

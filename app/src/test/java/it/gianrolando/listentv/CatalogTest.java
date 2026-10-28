@@ -27,8 +27,8 @@ public class CatalogTest {
   @Test
   public void favoritesDoNotRebuildTheCatalogAndChannelIdsStayStable() {
     List<Catalog.Channel> first = catalog.all();
-    assertEquals(48, first.size());
-    assertEquals(48, first.stream().map(Catalog.Channel::id).distinct().count());
+    assertEquals(51, first.size());
+    assertEquals(51, first.stream().map(Catalog.Channel::id).distinct().count());
     catalog.toggle("rai1");
     assertSame(first, catalog.all());
     assertSame(first.get(0), catalog.find("rai1"));
@@ -36,6 +36,8 @@ public class CatalogTest {
     assertNull(catalog.find("rairadio2"));
     assertEquals("discovery", catalog.find("tv8").group());
     assertEquals("sky", catalog.find("tv8").provider());
+    for (String id : List.of("sportitalia", "ilsole24oretv", "telecapodistria"))
+      assertFalse(List.of("rai", "mediaset", "discovery").contains(catalog.find(id).group()));
   }
 
   @Test
@@ -45,13 +47,13 @@ public class CatalogTest {
     catalog.add("Test source", "https://example.com/live.m3u8");
     List<Catalog.Channel> updated = other.all();
     assertNotSame(first, updated);
-    assertEquals(49, updated.size());
-    Catalog.Channel custom = updated.get(48);
+    assertEquals(52, updated.size());
+    Catalog.Channel custom = updated.get(51);
     assertEquals(custom, other.find(custom.id()));
     catalog.toggle(custom.id());
     assertTrue(other.favorite(custom.id()));
     catalog.remove(custom.id());
-    assertEquals(48, other.all().size());
+    assertEquals(51, other.all().size());
     assertNull(other.find(custom.id()));
     assertFalse(other.favorite(custom.id()));
   }
@@ -68,7 +70,20 @@ public class CatalogTest {
         .edit()
         .putString("custom", "bad json")
         .commit();
-    assertEquals(48, catalog.all().size());
+    assertEquals(51, catalog.all().size());
     assertNotNull(catalog.find("rai1"));
+  }
+
+  @Test
+  public void bitmapAndVectorChannelArtRemainValidForAndroidAuto() {
+    for (String id : List.of("rai1", "sportitalia", "ilsole24oretv", "telecapodistria")) {
+      byte[] bytes = ChannelArtwork.data(context, id);
+      assertNotNull(bytes);
+      android.graphics.Bitmap bitmap =
+          android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+      assertNotNull(bitmap);
+      assertEquals(512, bitmap.getWidth());
+      assertEquals(512, bitmap.getHeight());
+    }
   }
 }
