@@ -238,3 +238,17 @@ No access tokens or complete official pages are committed.
 The legacy La7 URLs redirect to `https://www.la7play.it/dirette/la7` and
 `https://www.la7play.it/dirette/la7-cinema`. The resolver uses those current
 pages directly and sends the new La7Play Origin/Referer for DRM requests.
+
+### Recorded 1.3.3 verification
+
+- Application source commit: `11413d3cbc559263c6483e50ec2254bf1a61e8b1`.
+- Private Actions build: https://github.com/gianrolando/ListenTv/actions/runs/40678972297.
+- All 39 regression tests passed; release/debug compilation and Java formatting passed.
+- Release lint: 0 errors, 8 pre-existing warnings.
+- Canonical pages, fresh guest tokens and primary audio-bearing Widevine manifests returned HTTP 200
+  for both channels using the new La7Play Origin/Referer and application user agent.
+- Signed APK version 1.3.3 (12); SHA-256: `2c9356ebf845669eba141dde9deb32401803e15be019feca67a5ea417dea5dde`.
+- Stable RSA-3072 certificate and signature schemes v1/v2/v3 verified.
+- Signed manifest version, new La7Play resolver strings and legal assets verified.
+- Actual Widevine licensing/decoding on the user's phone remains to be confirmed.
+- Documentation-only commits do not change the tested application source.
