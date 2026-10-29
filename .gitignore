@@ -9,3 +9,7 @@ local.properties
 *.aab
 *.p12
 *.pfx
+*.pem
+password*.txt
+.env
+.env.*

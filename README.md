@@ -87,8 +87,8 @@ private release signing key is used.
 
 ## Install the stable app
 
-Install the signed `ListenTv-1.4.0.apk` from the private release package supplied
-by the project owner. The stable release is signed with a dedicated release key,
+Download the signed `ListenTv-1.4.0.apk` from [GitHub Releases](https://github.com/gianrolando/ListenTv/releases).
+Each published release includes an APK and a SHA-256 checksum. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 
 Earlier 0.x development APKs have a different debug signature. Android requires
@@ -96,9 +96,9 @@ uninstalling that development app before installing 1.0.0; that clears local
 favorites and custom sources. Later releases signed with the same release key
 can update the stable app normally.
 
-The repository remains private. No public release or Play Store publication is
-part of this delivery. GitHub Actions' **unsigned release build** is a developer
-input to signing and cannot be installed directly.
+GitHub Actions' **unsigned release build** is a developer input to signing and
+cannot be installed directly. GitHub distribution does not imply Play Store
+publication.
 
 ## Use
 
@@ -143,6 +143,16 @@ No signing credentials are stored in GitHub Actions or its artifacts.
 Actions runs regression tests, compiles the release and captures the UI on a
 phone/tablet emulator using a separate debug-only UI test APK. The signing
 runtime/tools are not included in the app. See VERIFICATION.md for validation.
+
+## Validation status — 1.4.0
+
+Release compilation, 45 automated tests, Java formatting and Android lint passed
+(zero lint errors; eight warnings). The Android emulator launched the app and
+displayed the 51-channel catalog. On 2026-10-29, the live-guide UI check failed
+because the emulator could not resolve epg-guide.com or www.raiplay.it. The
+workflow is therefore not fully passing; end-to-end guide verification remains
+open. Physical-device Widevine and Android Auto playback have not been verified
+by this CI run. See VERIFICATION.md for the existing test record.
 
 ## License and credits
 
