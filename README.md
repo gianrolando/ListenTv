@@ -2,7 +2,7 @@
 
 Listen to live television as audio, with background playback and Android Auto.
 
-**Stable version 1.4.0 · Android 6.0+ · GPL-3.0-or-later**
+**Stable version 1.4.1 · Android 6.0+ · GPL-3.0-or-later**
 
 Copyright © 2026 Gianrolando Scaringi.
 
@@ -87,7 +87,7 @@ private release signing key is used.
 
 ## Install the stable app
 
-Download the signed `ListenTv-1.4.0.apk` from [GitHub Releases](https://github.com/gianrolando/ListenTv/releases).
+Download the signed `ListenTv-1.4.1.apk` from [GitHub Releases](https://github.com/gianrolando/ListenTv/releases).
 Each published release includes an APK and a SHA-256 checksum. The stable release is signed with a dedicated release key,
 and is not a debug build. Keep using the same release key for subsequent updates.
 
@@ -143,6 +143,19 @@ No signing credentials are stored in GitHub Actions or its artifacts.
 Actions runs regression tests, compiles the release and captures the UI on a
 phone/tablet emulator using a separate debug-only UI test APK. The signing
 runtime/tools are not included in the app. See VERIFICATION.md for validation.
+
+## Mediaset playback resilience — 1.4.1
+
+Protected Mediaset channels now enable Widevine multi-session support so key
+changes can acquire the required licenses during playback. Clear TGcom24 streams
+still use no DRM session. The player also resumes at the default live position
+when Media3 reports that buffered segments have left the live window, rather
+than remaining stopped. Other errors are not retried in a loop.
+
+These changes address missing playback handling identified after a report of
+Mediaset stopping shortly after startup. They do not establish the cause on the
+reporting device; prolonged playback with its Widevine implementation still
+requires device validation.
 
 ## Validation status — 1.4.0
 

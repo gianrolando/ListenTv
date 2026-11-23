@@ -1,11 +1,11 @@
-# ListenTv 1.4.0 — three additional TV channels
+# ListenTv 1.4.1 — Mediaset playback resilience
 
-- Add Sportitalia, Il Sole 24 Ore TV and Telecapodistria to the Other group (51 channels).
-- Resolve current Sportitalia and official Sole/Brightcove sources at playback time.
-- Obtain fresh Telecapodistria URLs from RTV Slovenija without persisting signed stream links.
-- Bundle channel artwork, including a 1600-pixel rendering of the official Telecapodistria vector wordmark.
-- Keep lightweight bitmap artwork rendering and the existing 512-pixel Android Auto output.
-- Preserve TV8 before NOVE in Discovery, existing favorites and the stable signing key.
+- Enable Widevine multi-session support for protected Mediaset live channels, allowing fresh license requests when keys change.
+- Recover from Media3's behind-live-window error by resuming at the default live position.
+- Keep DRM-free TGcom24 playback and other broadcasters' DRM configuration unchanged.
+- Add offline regression coverage for Mediaset DRM setup, source types and license transport validation.
+- Preserve the 51-channel catalog, favorites and release signing identity.
 
-Guide data appears where the configured guide covers a channel; unavailable listings are not invented.
+This update addresses missing handling found while investigating Mediaset playback stopping after a few seconds. The exact failure on the reporting device has not been reproduced; prolonged Widevine playback must still be checked on that device.
+
 Broadcaster geographic and programme restrictions still apply.

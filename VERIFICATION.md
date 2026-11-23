@@ -286,3 +286,15 @@ pages directly and sends the new La7Play Origin/Referer for DRM requests.
 - Same stable certificate and v1/v2/v3 signatures verified; signed version, channel names and legal assets checked.
 - Device playback and Android Auto hardware remain user-device checks. No public release published.
 - Documentation-only commits do not alter the tested application source.
+
+
+## 1.4.1 Mediaset playback investigation — 2026-11-23
+
+- Report: Mediaset channels stop shortly after playback begins. No device error log was supplied; no Android device is attached to this environment.
+- Guest authorization and the current Widevine manifests for Canale 5, Italia 1, Rete 4 and La5 responded successfully. TGcom24 returned an unencrypted DASH manifest.
+- The observed manifests refresh every four seconds and advertise a two-minute live window. A successful initial request alone does not establish continuous device playback.
+- Found missing MediaItem multi-session configuration required by Media3 for rotating keys; enabled it only for encrypted Mediaset sources. This is a compatibility correction, not proof that key rotation caused the reported failure.
+- Added the documented recovery for ERROR_CODE_BEHIND_LIVE_WINDOW. No unrestricted retry of DRM, authorization or other playback errors was introduced.
+- Added four regression cases for protected Mediaset configuration, unprotected TGcom24 behavior, unchanged DRM settings for other providers and rejection of HTTP license URLs.
+- References: https://developer.android.com/media/media3/exoplayer/drm and https://developer.android.com/media/media3/exoplayer/live-streaming .
+- CI and signed-APK checks: pending below; hardware Widevine/Android Auto verification remains outstanding.

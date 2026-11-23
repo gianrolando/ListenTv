@@ -64,6 +64,18 @@ public final class PlaybackService extends MediaLibraryService {
                             .setConnectTimeoutMs(10000)
                             .setReadTimeoutMs(15000)))
             .build();
+    player.addListener(
+        new Player.Listener() {
+          @Override
+          public void onPlayerError(PlaybackException error) {
+            android.util.Log.w("ListenTvPlayback", error.getErrorCodeName());
+            if (error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
+              // Resume at the live position after buffered segments leave the broadcaster window.
+              player.seekToDefaultPosition();
+              player.prepare();
+            }
+          }
+        });
     player.setAudioAttributes(
         new AudioAttributes.Builder()
             .setUsage(C.USAGE_MEDIA)

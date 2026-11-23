@@ -20,7 +20,7 @@ public final class StreamResolver {
     this.context = context.getApplicationContext();
   }
 
-  static final String USER_AGENT = "listentv/1.4.0 (Android; audio player)";
+  static final String USER_AGENT = "listentv/1.4.1 (Android; audio player)";
 
   static final class HttpStatusException extends IOException {
     HttpStatusException(int status) {
@@ -53,20 +53,26 @@ public final class StreamResolver {
           case "sanmarino" -> sanMarino(channel.key());
           default -> plain(channel.key());
         };
-    requireHttps(s.url());
-    MediaItem.Builder b = channel.item(context).buildUpon().setUri(s.url());
-    if (s.mimeType() != null) b.setMimeType(s.mimeType());
-    if (channel.provider().equals("mediaset"))
-      b.setMimeType(androidx.media3.common.MimeTypes.APPLICATION_MPD);
-    if (s.license() != null) {
-      requireHttps(s.license());
-      b.setDrmConfiguration(
+    return configureSource(channel.item(context), s, channel.provider().equals("mediaset"));
+  }
+
+  static MediaItem configureSource(MediaItem item, Source source, boolean mediaset)
+      throws Exception {
+    requireHttps(source.url());
+    MediaItem.Builder builder = item.buildUpon().setUri(source.url());
+    if (source.mimeType() != null) builder.setMimeType(source.mimeType());
+    if (mediaset) builder.setMimeType(androidx.media3.common.MimeTypes.APPLICATION_MPD);
+    if (source.license() != null) {
+      requireHttps(source.license());
+      builder.setDrmConfiguration(
           new MediaItem.DrmConfiguration.Builder(C.WIDEVINE_UUID)
-              .setLicenseUri(s.license())
-              .setLicenseRequestHeaders(s.licenseHeaders())
+              .setLicenseUri(source.license())
+              .setLicenseRequestHeaders(source.licenseHeaders())
+              // Live Mediaset streams can rotate keys while the channel remains selected.
+              .setMultiSession(mediaset)
               .build());
     }
-    return b.build();
+    return builder.build();
   }
 
   private Source plain(String url) {
