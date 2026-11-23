@@ -297,4 +297,8 @@ pages directly and sends the new La7Play Origin/Referer for DRM requests.
 - Added the documented recovery for ERROR_CODE_BEHIND_LIVE_WINDOW. No unrestricted retry of DRM, authorization or other playback errors was introduced.
 - Added four regression cases for protected Mediaset configuration, unprotected TGcom24 behavior, unchanged DRM settings for other providers and rejection of HTTP license URLs.
 - References: https://developer.android.com/media/media3/exoplayer/drm and https://developer.android.com/media/media3/exoplayer/live-streaming .
-- CI and signed-APK checks: pending below; hardware Widevine/Android Auto verification remains outstanding.
+- Four sampled manifest refreshes per channel (Canale 5, Italia 1, Rete 4 and TGcom24), spanning about three minutes, all returned current manifests and HTTP 206 audio-segment samples (16 successful segment requests). Key identifiers did not change during these observations; DRM rotation was not reproduced.
+- GitHub Actions run 45248881329, build job 137952863318: Java formatting, all unit tests (49 cases in the source suite), release/debug builds and lint passed. Lint: zero errors, eight existing warnings. The separate emulator UI job was still running when the APK was prepared.
+- APK: ListenTv-1.4.1.apk, versionCode 14, 6,442,612 bytes; SHA-256 ae3c5433a537895776300253a3a100738ddc8eda39590cdc639cd84af8bc037b.
+- v1/v2/v3 signatures verified; certificate SHA-256 8f473cc34b872ae99d4e630ded22ec544a0c6440981c8774318908e8ab887795 matches the established release key.
+- Hardware Widevine/Android Auto verification and confirmation of the reported playback fix remain outstanding.
